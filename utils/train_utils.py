@@ -88,7 +88,7 @@ class Train:
             self.optimizer.zero_grad()
 
             train_outputs = self.model(train_inputs)
-            train_loss = self.criterion(train_outputs.flatten(), train_targets)
+            train_loss = self.criterion(train_outputs, train_targets)
             train_loss.backward()
             self.optimizer.step()
 
@@ -115,7 +115,7 @@ class Train:
                 val_targets = val_targets.to(self.device)
 
                 val_outputs = self.model(val_inputs)
-                val_loss = self.criterion(val_outputs.flatten(), val_targets)
+                val_loss = self.criterion(val_outputs, val_targets)
 
                 current_val_loss += val_loss.item()
 
