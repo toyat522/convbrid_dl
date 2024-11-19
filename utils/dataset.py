@@ -80,11 +80,14 @@ class RequiredDatasets(Dataset):
         Split is proportion of training that will be used 
         """        
         return DataLoader(dataset, batch_size,
-                        shuffle=True, num_workers=0)
+                        shuffle=True, num_workers=10)
 
 if __name__ == "__main__":
     dataset = RequiredDatasets('./data')
+    batch_size = 64
+
     train, val, test = dataset.get_CIFAR100_dataset()
+
     transform = v2.Compose([
             v2.RandomResizedCrop(size=(32, 32), antialias=True),
             v2.RandomHorizontalFlip(p=0.5),
@@ -92,6 +95,6 @@ if __name__ == "__main__":
             v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
     augmented_train = dataset.augment(transform, train, 2) #each image is augmented to make 2
-    train_dataloader = dataset.get_dataloader(augmented_train)
-    val_dataloader = dataset.get_dataloader(val)
-    test_dataloader = dataset.get_dataloader(test)
+    train_dataloader = dataset.get_dataloader(augmented_train, batch_size)
+    val_dataloader = dataset.get_dataloader(val, batch_size)
+    test_dataloader = dataset.get_dataloader(test, batch_size)
