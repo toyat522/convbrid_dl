@@ -68,9 +68,9 @@ class RequiredDatasets(Dataset):
         ])
         return self.augment(transforms, dataset, 1000, download, save_dir)
     
-    def get_dataloader(self, dataset, batch_size):
-        return DataLoader(dataset, batch_size,
-                        shuffle=True, num_workers=0)
+    def get_dataloader(self, dataset, batch_size, num_workers=4):
+        return DataLoader(dataset, batch_size, num_workers,
+                          shuffle=True, num_workers=0)
 
 if __name__ == "__main__":
     test_dataset = RequiredDatasets('./data')
