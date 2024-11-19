@@ -1,3 +1,6 @@
 [submodule "tiny-transformers"]
 	path = tiny-transformers
 	url = git@github.com:toyat522/tiny-transformers.git
+[submodule "T2T-ViT"]
+	path = T2T-ViT
+	url = git@github.com:yitu-opensource/T2T-ViT.git
