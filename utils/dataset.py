@@ -29,10 +29,11 @@ class RequiredDatasets(Dataset):
                                                   transform=transforms.ToTensor(),
                                                   )
         
-        train_size = len(train_and_val_dataset) * split
-        val_size = len(train_and_val_dataset) * (1-split)
+        train_size = int(len(train_and_val_dataset) * split)
+        val_size = len(train_and_val_dataset) - train_size
 
         train_dataset, val_dataset = random_split(train_and_val_dataset, [train_size, val_size])
+        
         test_dataset = datasets.CIFAR100(root=self.root_dir,
                                                  train=False,
                                                  download=True,
@@ -61,19 +62,19 @@ class RequiredDatasets(Dataset):
                 utils.save_image(image[0], '{}/image_{}.png'.format(save_dir, idx))
         return new_dataset
         
-    def augment_example(self, dataset, download=False, save_dir = None):
-        """
-        Example transform.
-        """
-        torch.manual_seed(10)
-        random.seed(10)
-        transforms = v2.Compose([
-            v2.RandomResizedCrop(size=(32, 32), antialias=True),
-            v2.RandomHorizontalFlip(p=0.5),
-            v2.RandomTranslate(translate=(0.2, 0.2)),
-            v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ])
-        return self.augment(transforms, dataset, 2, download, save_dir)
+    # def augment_example(self, dataset, download=False, save_dir = None):
+    #     """
+    #     Example transform.
+    #     """
+    #     torch.manual_seed(10)
+    #     random.seed(10)
+    #     transforms = v2.Compose([
+    #         v2.RandomResizedCrop(size=(32, 32), antialias=True),
+    #         v2.RandomHorizontalFlip(p=0.5),
+    #         v2.RandomAffine(degrees=0, translate=(0.2, 0.2)),
+    #         v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    #     ])
+    #     return self.augment(transforms, dataset, 2, download, save_dir)
     
     def get_dataloader(self, dataset, batch_size):
         """
@@ -88,13 +89,16 @@ if __name__ == "__main__":
 
     train, val, test = dataset.get_CIFAR100_dataset()
 
+    torch.manual_seed(10)
+    random.seed(10)
+
     transform = v2.Compose([
             v2.RandomResizedCrop(size=(32, 32), antialias=True),
             v2.RandomHorizontalFlip(p=0.5),
-            v2.RandomTranslate(translate=(0.2, 0.2)),
+            v2.RandomAffine(degrees=0, translate=(0.2, 0.2)),
             v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
-    augmented_train = dataset.augment(transform, train, 2) #each image is augmented to make 2
+    augmented_train = dataset.augment(transform, train, 2, download=True, save_dir="./augment_test") #each image is augmented to make 2
     train_dataloader = dataset.get_dataloader(augmented_train, batch_size)
     val_dataloader = dataset.get_dataloader(val, batch_size)
     test_dataloader = dataset.get_dataloader(test, batch_size)
