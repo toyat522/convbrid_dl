@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import random
 import os
 
-class CIFAR100(Dataset):
+class RequiredDatasets(Dataset):
     def __init__(self, root_dir, train_transform=None, test_transform=None):
         """
         root_dir: root directory where dataset is downloaded
@@ -17,7 +17,7 @@ class CIFAR100(Dataset):
         self.train_transform = train_transform
         self.test_transform = test_transform
 
-    def get_dataset(self):
+    def get_CIFAR100_dataset(self):
         """
         Downloads dataset locally and generates training and test datasets.
         """
@@ -70,8 +70,8 @@ class CIFAR100(Dataset):
 
 
 if __name__ == "__main__":
-    test_dataset = CIFAR100('./data')
-    train, test = test_dataset.get_dataset()
+    test_dataset = RequiredDatasets('./data')
+    train, test = test_dataset.get_CIFAR100_dataset()
     # for idx in range(5):
     #     plt.subplot(1, 5, idx + 1)
     #     plt.imshow(train[idx][0].permute(1, 2, 0))
