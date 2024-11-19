@@ -137,7 +137,7 @@ class Train:
             'optimizer_state_dict': self.optimizer.state_dict(),
         }, out_path)
 
-    def train(self,save_every=None,model_path=None):
+    def train(self,train_results_path=None,save_every=None,model_path=None):
         """
         Trains the model for the specified number of epochs.
 
@@ -175,3 +175,12 @@ class Train:
                 self.save_model(f'{model_path}/epoch_{epoch}.pth')
 
             print(f'Epoch {epoch+1}/{self.num_epochs} - Train Loss: {train_loss:.4f} - Val Loss: {val_loss:.4f}')
+
+        if train_results_path:
+            with open(train_results_path, 'wb') as f:
+                pickle.dump({
+                    'train_losses': train_losses,
+                    'val_losses': val_losses,
+                    'train_accuracies': train_accuracies,
+                    'val_accuracies': val_accuracies,
+                }, f)
