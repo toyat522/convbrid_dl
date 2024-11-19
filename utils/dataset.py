@@ -1,5 +1,5 @@
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 from torchvision import datasets, transforms, utils
 from torchvision.transforms import ToTensor, v2
 import matplotlib.pyplot as plt
@@ -37,6 +37,7 @@ class RequiredDatasets(Dataset):
         """
         Performs augmentation using a specified transform on a dataset, 
         such that the new dataset has size target_size.
+        If download = True, downloads the augmented images locally at location save_dir
 
         Returns a new dataset of size target_size.
         """
@@ -67,17 +68,15 @@ class RequiredDatasets(Dataset):
         ])
         return self.augment(transforms, dataset, 1000, download, save_dir)
     
-
+    def get_dataloader(self, dataset, batch_size):
+        return DataLoader(dataset, batch_size,
+                        shuffle=True, num_workers=0)
 
 if __name__ == "__main__":
     test_dataset = RequiredDatasets('./data')
     train, test = test_dataset.get_CIFAR100_dataset()
+    augmented_train = test_dataset.augment_example(train, download=True, save_dir='./augmented')
     # for idx in range(5):
     #     plt.subplot(1, 5, idx + 1)
-    #     plt.imshow(train[idx][0].permute(1, 2, 0))
-    
-    augmented_train = test_dataset.augment_example(train, download=True, save_dir='./augmented')
-    for idx in range(5):
-        plt.subplot(1, 5, idx + 1)
-        plt.imshow(augmented_train[idx][0].permute(1, 2, 0))
-    plt.show()
+    #     plt.imshow(augmented_train[idx][0].permute(1, 2, 0))
+    # plt.show()
