@@ -139,14 +139,12 @@ class Train:
 
     def train(self,train_results_path=None,save_every=None,model_path=None):
         """
-        Trains the model for the specified number of epochs.
+        Trains the model for the specified number of epochs and optionally saves training results and model checkpoints.
 
         Args:
-            save_every (int, optional): Interval (in epochs) to save the model. Defaults to None.
-            model_path (str, optional): Directory to save model checkpoints. Required if save_every is specified.
-
-        Returns:
-            tuple: Training and validation losses, and accuracies for all epochs.
+            train_results_path (str, optional): Path to save the training results (losses and accuracies) as a pickle file. Defaults to None.
+            save_every (int, optional): Interval (in epochs) to save the model checkpoint. Defaults to None.
+            model_path (str, optional): Directory path where model checkpoints will be saved. Required if save_every is specified.
         """
 
         train_losses = []
