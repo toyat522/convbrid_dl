@@ -238,7 +238,7 @@
 		}
 	</style>
 
-	<title>The Platonic Representation Hypothesis</title>
+	<title>CONVbrid Transformer: Enforcing Locality via CNN-like Attention Masking</title>
 	<meta property="og:title" content="The Platonic Representation Hypothesis" />
 	<meta charset="UTF-8">
 </head>
@@ -297,11 +297,21 @@
 			Vision Transformers (ViTs) are applications of the standard transformer to computer vision settings,
 			drawing inspiration from the success of these architectures in natural language processing. When applied to
 			images, they divide the image into patches and use the sequence of patches as an input into the transformer. 
-			\cite{originalVIT} They have been shown to perform better than deep CNNs on key datasets such as ImageNet
-			and CIFAR-10/100.
+			<a href="#ref_1">[1]</a> They have been shown to perform better than deep CNNs on key datasets such as ImageNet
+            and CIFAR-10/100.<br><br>
+
+            To address the challenge of ViTs requiring large datasets for effective training, we propose the CONVbrid
+            Transformer, a hybrid CNN-ViT architecture that incorporates locality inductive biases. This design enables more
+            efficient training of transformers on smaller datasets by leveraging the spatial awareness of convolutional
+            layers alongside the global attention of transformers. During the initial N epochs of training, CONVbrid uses
+            attention masks to limit attention to local patches, mimicking CNN behavior. This constraint encourages the
+            model to learn spatial locality early on, enhancing data efficiency and robustness on smaller datasets. Similar
+            attention masking approaches have been proposed in [e.g. 2–5]. However, in these works, the authors focus on
+            reducing complexity and memory requirements in training models with large datasets. CONVbrid also introduces
+            a parameter λ during these epochs, controlling the rate at which this constraint is relaxed. With a larger λ,
+            the attention masks expand more quickly, enabling a gradual transition toward global attention.
 		</div>
 		<div class="margin-right-block">
-			Margin note that clarifies some detail #main-content-block for intro section.
 		</div>
 	</div>
 
@@ -309,10 +319,13 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Does X do Y?</h1>
-			It is well known that Y does Y. And this has raised the question does X do Y? Because if Y does Y then it
-			stands to reason that X does Y.
-			But we cannot answer this until we realize the Z implies Y and X can be linked to Z.<br><br>
+			<h1>Background and Related Work</h1>
+            Prior work has been done on mitigating the lack of inductive bias. Adding a small multi-layer perception (MLP)
+            to the architecture to learn relative distances in the image from the patch embeddings <a href="#ref_6">[6]</a> has been
+            shown to improve performance. Using MLPs to successively tokenize the image is another way to capture local
+            structures <a href="#ref_7">[7]</a>. CONVbrid will provide a closer imitation of the CNNs with the desirable inductive
+            bias. It has also been shown that careful tokenization can overcome the need for large datasets in
+            transformers. <a href="#ref_8">[8]</a><br><br>
 
 			Now let's write some math!<br>
 			<center>
@@ -341,8 +354,7 @@
 			rendering equations on webpages.
 		</div>
 		<div class="margin-right-block" style="transform: translate(0%, -100%);">
-			<!-- you can move the margin notes up and down with translate -->
-			Interestingly, Plato also asked if X does Y, in <a href="#ref_1">[1]</a>.
+		    <!-- you can move the margin notes up and down with translate -->
 		</div>
 	</div>
 
@@ -350,7 +362,40 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Implications and limitations</h1>
+			<h1>Experiments</h1>
+            We will perform a series of experiments to determine the performance of our architecture on various small
+            datasets and compare the results with pure CNNs and ViTs.<br><br>
+
+            We first repeat the test in <a href="#ref_9">[9]</a>, comparing the performances of a T2T-ViT-14 transformer
+            <a href="#ref_7">[7]</a> to that of a CNN with the same complexity using the CiFAR-100 dataset. We aim to
+            reconfirm and quantify the level of improvement with CNN over transformers in the context of smaller datasets.
+            We then create a CONVbrid transformer with the exact convolution characteristics of the CNN (similar
+            layers and kernel sizes) and compare its performance on the CiFAR-100 dataset with the two aforementioned models.
+            We expect the CONVbrid model to perform similarly if not better than the CNN.<br><br>
+
+            After this initial step, we will explore how the following factors affect performance, expanding to
+            larger datasets such as ImageNet-1K <a href="#ref_10">[10]</a><br>
+		</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="implications_and_limitations">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h1>Results</h1>
+			Let's end with some discussion of the implications and limitations.
+		</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="implications_and_limitations">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h1>Conclusion</h1>
 			Let's end with some discussion of the implications and limitations.
 		</div>
 		<div class="margin-right-block">
@@ -363,9 +408,37 @@
 		<div class="main-content-block">
 			<div class='citation' id="references" style="height:auto"><br>
 				<span style="font-size:16px">References:</span><br><br>
-				<a id="ref_1"></a>[1] <a href="https://en.wikipedia.org/wiki/Allegory_of_the_cave">Allegory of the
-					Cave</a>, Plato, c. 375 BC<br><br>
-				<a id="ref_2"></a>[2] <a href="">A Human-Level AGI</a>, OpenAI, 2025<br><br>
+				<a id="ref_1"></a>[1] <a href="https://arxiv.org/abs/2010.11929">
+					An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a>,
+                    A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner,
+                    M. Dehghani, M. Minderer, G. Heigold, S. Gelly, J. Uszkoreit, N. Houlsby, 2021<br><br>
+				<a id="ref_2"></a>[2] <a href="https://arxiv.org/abs/2006.04768">
+                    Linformer: Self-Attention with Linear Complexity</a>,
+                    S. Wang, B. Z. Li, M. Khabsa, H. Fang, H. Ma, 2020<br><br>
+				<a id="ref_3"></a>[3] <a href="https://arxiv.org/abs/1904.10509">
+                    Generating Long Sequences with Sparse Transformer</a>,
+                    R. Child, S. Gray, A. Radford, I. Sutskever, 2019<br><br>
+				<a id="ref_4"></a>[4] <a href="https://arxiv.org/abs/1911.02972">
+                    Blockwise Self-Attention for Long Document Understanding</a>,
+                    J. Qiu, H. Ma, O. Levy, S. Wen-tau Yih, S. Wang, J. Tang, 2019<br><br>
+				<a id="ref_5"></a>[5] <a href="https://arxiv.org/abs/2004.05150">
+                    Longformer: The Long-Document Transformer</a>,
+                    I. Beltagy, M. E. Peters, A. Cohan, 2020<br><br>
+				<a id="ref_6"></a>[6] <a href="https://arxiv.org/abs/2106.03746">
+                    Efficient Training of Visual Transformers with Small Datasets</a>,
+                    Y. Liu, E. Sangineto, W. Bi, N. Sebe, B. Lepri, M. De Nadai, 2021<br><br>
+				<a id="ref_7"></a>[7] <a href="https://arxiv.org/abs/2101.11986">
+                    Tokens-to-Token ViT: Training Vision Transformers from Scratch on ImageNet</a>,
+                    L. Yuan, Y. Chen, T. Wang, W. Yu, Y. Shi, Z. Jiang, F. E. Tay, J. Feng, S. Yan, 2021<br><br>
+				<a id="ref_8"></a>[8] <a href="https://arxiv.org/abs/2104.05704">
+                    Escaping the Big Data Paradigm with Compact Transformers</a>,
+                    A. Hassani, S. Walton, N. Shah, A. Abuduweili, J. Li, H. Shi, 2021<br><br>
+				<a id="ref_9"></a>[9] <a href="https://arxiv.org/abs/2207.10026">
+                    Locality Guidance for Improving Vision Transformers on Tiny Datasets</a>,
+                    K. Li, R. Yu, Z. Wang, L. Yuan, G. Song, J. Chen, 2022<br><br>
+			    <a id="ref_10"></a>[10] <a href="https://ieeexplore.ieee.org/document/5206848">
+                    Imagenet: A large-scale hierarchical image database</a>,
+                    J. Deng, W. Dong, R. Socher, L.-J. Li, K. Li, L. Fei-Fei, 2009<br><br>
 			</div>
 		</div>
 		<div class="margin-right-block">
