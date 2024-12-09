@@ -315,7 +315,9 @@
             significant challenge for developing effective ViT models in domains with limited
             large-scale datasets, such as medical imaging <a href="#ref_7">[7]</a>.<br><br>
 
-            To address this issue, we propose the CONVbrid Transformer, a hybrid CNN-ViT architecture that incorporates
+            In this project, we began by validating the tendency of ViTs to overfit and struggle with learning local information
+            on small-scale datasets, using CIFAR-10 and CIFAR-100. Then, to address this issue, we attempted to develop the CONVbrid
+            Transformer, a custom hybrid CNN-ViT architecture that incorporates
             locality inductive biases. During the initial stages of training, CONVbrid uses attention masks to limit attention
             to local patches, mimicking the locality behavior of CNNs. This constraint encourages the model to learn spatial locality
             early on during training without the need of large datasets for the model to learn inductive biases.
@@ -331,7 +333,8 @@
 		</div>
 		<div class="main-content-block">
 			<h1>Background and Related Work</h1>
-            Some prior work has been done on mitigating the lack of inductive bias on ViTs. Adding a small multi-layer perception (MLP)
+            Some prior work has been done on mitigating the lack of inductive bias on ViTs. For instance, Li et. al proposed adding a small
+            multi-layer perception (MLP) <!-- TODO WHAT THE FRICK IS GOING ON -->
             to the architecture to learn relative distances in the image from the patch embeddings <a href="#ref_6">[6]</a> has been
             shown to improve performance. Using MLPs to successively tokenize the image is another way to capture local
             structures <a href="#ref_7">[7]</a>. CONVbrid will provide a closer imitation of the CNNs with the desirable inductive
@@ -348,8 +351,8 @@
 		</div>
 		<div class="main-content-block">
 			<h1>Experiments</h1>
-            We will perform a series of experiments to determine the performance of our architecture on various small
-            datasets and compare the results with pure CNNs and ViTs.<br><br>
+            We first performed a series of experiments to validate the findings of previous papers that ViTs struggle to
+            find meaningful relations between image patches close to each other and tend to overfit to the test data.<br><br>
 
             We first repeat the test in <a href="#ref_9">[9]</a>, comparing the performances of a T2T-ViT-14 transformer
             <a href="#ref_7">[7]</a> to that of a CNN with the same complexity using the CiFAR-100 dataset. We aim to
