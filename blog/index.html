@@ -294,22 +294,33 @@
 		</div>
 		<div class="main-content-block">
 			<h1>Introduction</h1>
-			Vision Transformers (ViTs) are applications of the standard transformer to computer vision settings,
-			drawing inspiration from the success of these architectures in natural language processing. When applied to
-			images, they divide the image into patches and use the sequence of patches as an input into the transformer. 
-			<a href="#ref_1">[1]</a> They have been shown to perform better than deep CNNs on key datasets such as ImageNet
-            and CIFAR-10/100.<br><br>
+            Vision Transformers (ViTs) adapt the standard transformer architecture, originally designed for natural
+            language processing, to computer vision tasks. They process images by dividing them into patches and treating
+            these patches as a sequence of inputs to the transformer. ViTs have demonstrated improved performance compared
+            to deep convolutional neural networks (CNNs) on large-scale datasets such as ImageNet-21k and JFM-300M. <a href="#ref_1">[1]</a>
+            <br><br>
 
-            To address the challenge of ViTs requiring large datasets for effective training, we propose the CONVbrid
-            Transformer, a hybrid CNN-ViT architecture that incorporates locality inductive biases. This design enables more
-            efficient training of transformers on smaller datasets by leveraging the spatial awareness of convolutional
-            layers alongside the global attention of transformers. During the initial N epochs of training, CONVbrid uses
-            attention masks to limit attention to local patches, mimicking CNN behavior. This constraint encourages the
-            model to learn spatial locality early on, enhancing data efficiency and robustness on smaller datasets. Similar
-            attention masking approaches have been proposed in [e.g. 2–5]. However, in these works, the authors focus on
-            reducing complexity and memory requirements in training models with large datasets. CONVbrid also introduces
-            a parameter λ during these epochs, controlling the rate at which this constraint is relaxed. With a larger λ,
-            the attention masks expand more quickly, enabling a gradual transition toward global attention.
+            The self-attention mechanism in Vision Transformers (ViTs) enables them to capture global image context,
+            enhancing performance. However, unlike convolutional neural networks (CNNs), ViTs lack inductive biases for learning
+            local structures and are not inherently translation invariant due to their reliance on positional embeddings. As
+            a result, ViTs require large datasets or extensive data augmentation for effective training. This also leads to
+            a higher parameter count and the need for substantially larger training datasets to match the performance of CNNs.
+            Notably, when trained on mid-sized datasets without regularization, ViTs perform comparably or slightly worse
+            than ResNets of similar size <a href="#ref_1">[1]</a>. When trained on CIFAR-100, ViTs tend to overfit the training set due to their difficulty in capturing local information, resulting in lower test accuracy <a href="#ref_9">[9]</a>:<br><br>
+
+            <img src="./images/vit_vs_cnn_li.jpg" width=512px/>
+
+            While substantial research has focused on developing accurate models that require large datasets,
+            relatively little attention has been given to training models on small datasets. This poses a
+            significant challenge for developing effective ViT models in domains with limited
+            large-scale datasets, such as medical imaging <a href="#ref_7">[7]</a>.<br><br>
+
+            To address this issue, we propose the CONVbrid Transformer, a hybrid CNN-ViT architecture that incorporates
+            locality inductive biases. During the initial stages of training, CONVbrid uses attention masks to limit attention
+            to local patches, mimicking the locality behavior of CNNs. This constraint encourages the model to learn spatial locality
+            early on during training without the need of large datasets for the model to learn inductive biases.
+            By combining the spatial awareness of convolutional layers with the global attention capabilities of
+            transformers, this design facilitates more efficient training on smaller datasets.<br><br>
 		</div>
 		<div class="margin-right-block">
 		</div>
@@ -320,38 +331,12 @@
 		</div>
 		<div class="main-content-block">
 			<h1>Background and Related Work</h1>
-            Prior work has been done on mitigating the lack of inductive bias. Adding a small multi-layer perception (MLP)
+            Some prior work has been done on mitigating the lack of inductive bias on ViTs. Adding a small multi-layer perception (MLP)
             to the architecture to learn relative distances in the image from the patch embeddings <a href="#ref_6">[6]</a> has been
             shown to improve performance. Using MLPs to successively tokenize the image is another way to capture local
             structures <a href="#ref_7">[7]</a>. CONVbrid will provide a closer imitation of the CNNs with the desirable inductive
             bias. It has also been shown that careful tokenization can overcome the need for large datasets in
-            transformers. <a href="#ref_8">[8]</a><br><br>
-
-			Now let's write some math!<br>
-			<center>
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
-					<mrow>
-						<mrow>
-							<mo>&#x2202;</mo>
-							<mi>y</mi>
-						</mrow>
-						<mo>/</mo>
-						<mrow>
-							<mo>&#x2202;</mo>
-							<mi>x</mi>
-						</mrow>
-					</mrow>
-					<mo>=</mo>
-					<mi>x</mi>
-				</math>
-			</center>
-			<br>
-			It's probably best to ask an LLM to help do the web
-			formatting for math. You can tell it "convert this latex equation into MathML: $$\frac{\partial dy}{\partial
-			dx} = x$$"
-			But it took me a few tries. So, if you get frustrated, you can embed an image of the equation, or use other
-			packages for
-			rendering equations on webpages.
+            transformers. <a href="#ref_8">[8]</a>. 
 		</div>
 		<div class="margin-right-block" style="transform: translate(0%, -100%);">
 		    <!-- you can move the margin notes up and down with translate -->
