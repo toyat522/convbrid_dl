@@ -436,7 +436,7 @@
 
 			Need to mention when ConvAttention is used, position embeding is not necessary, as the attention masking already capture the positional information.
 
-			<img src="./images/model.png" width="256px">
+			<img src="./images/model.png" width="500px">
 
 			In order to harness the strengths of both ViTs (in global context understanding) and CNNs (in local patterns), Convbrid
 			starts training with a small kernel size, and then the mask is removed after some epochs (which can also be set) so that 
@@ -580,16 +580,19 @@
 			transformer.
 			
 			<h1>ConvAttention</h1>
-			The attention masks were visualized INSERT IMAGES and it was found that it resembles a convolutional layer in enforcing locality.
-			Higher attention appears to be given to tokens near edges or areas with abrupt color transitions. This suggests that
-			the attention mechanism is inherently able to detect significant local features, just as in a CNN. <br></br>
+            In addition to comparing the validation loss and accuracy curves, we visualized the average attention map for the
+            first ConvAttention layer to confirm its behavior. As seen below, the attention map closely resembles the behavior
+            of a convolutional layer, effectively enforcing locality, which demonstrates that the attention masking is functioning
+            as intended. Higher attention is given to tokens near edges or regions with abrupt color transitions. This suggests that
+            the attention mechanism is naturally adept at detecting fine-grained local features, such as corners and edges, similar
+            to a CNN. This behavior highlights the model’s ability to capture local patterns early in the training process.<br><br>
 
-			<img src="./images/conv_attention_visualization_cifar10.png" width=512px/>
+			<img src="./images/conv_attention_visualization_cifar10.png" width=850px/>
 
 			<h1>ConvBrid</h1>
-			Discussing the attention visualization of the ConvBrid model <br></br>
+            Below are the attention maps for our ConvBrid model:<br><br>
 			
-			INSERT FIGURE <br></br>
+			<img src="./images/conv_attention_visualization_cifar10.png" width=850px/>
 
 			It was found that the switching mechanism does not work as intended. Discuss the TradAttention model, explaining that is the ConvAttention without attention masking (but with pooling). This model behavae exactly like the ConvAttention.
 			Discuss that the restricting mechanism is satisfy with the pooling alone and the attention masking is not necessary. This is still an interesting result. However, it create a diffuculty in transitioning between ConvAttention and traditional transfomer. <br></br>
