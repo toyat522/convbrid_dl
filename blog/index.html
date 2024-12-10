@@ -523,12 +523,19 @@
 		</div>
 	</div>
 
+	<!-- REMOVE IF THERES ENOUGH THINGS TO SAY-->
 	<div class="content-margin-container" id="implications_and_limitations">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
 			<h2>Further Work</h2>
-			Let's end with some discussion of the implications and limitations.
+			A further attempt was to change the ConvBrid kernel sizes more fluidly during the training process. The changed ConvBrid
+			model will take as input a function from epoch to kernel size, so that by inputting a slowly growing function,
+			the model will learn progressively broader contextual information. It aims to mimic a hierarchical learning process which
+			will be more efficient. <br></br>
+
+			However, as the pooling layer in the ConvAttention needs to have a fixed structure across epochs, it has to be initially set
+			to be compatible with the maximum kernel size in the training process. This means 
 		</div>
 		<div class="margin-right-block">
 		</div>
