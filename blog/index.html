@@ -507,6 +507,13 @@
 			SHOULD WE ALSO VISUALIZE THE CNN Kernel<br></br>
 
 			<h1>ConvBrid</h1>
+			Discussing the attention visualization of the ConvBrid model
+			
+			INSERT FIGURE
+
+			It was found that the switching mechanism does not work as intended. Discuss the TradAttention model, explaining that is the ConvAttention without attention masking (but with pooling). This model behavae exactly like the ConvAttention.
+			Discuss that the restricting mechanism is satisfy with the pooling alone and the attention masking is not necessary. This is still an interesting result. However, it create a diffuculty in transitioning between ConvAttention and traditional transfomer.
+
 			During the training of the ConvBrid model, the transition from ConvAttention (with kernel size = 5) to a transformer (without masking) 
 			is triggered when the ConvAttention module reaches saturation, indicated by the training accuracy plateauing. For CIFAR-10 and 
 			CIFAR-100, this corresponds to epochs _ and _ respectively.<br></br>
