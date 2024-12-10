@@ -315,9 +315,9 @@
             significant challenge for developing effective ViT models in domains with limited
             large-scale datasets, such as medical imaging <a href="#ref_7">[7]</a>.<br></br>
 
-            In this project, we began by validating the tendency of ViTs to overfit and struggle with learning local information
-            on small-scale datasets, using CIFAR-10 and CIFAR-100. Then, to address this issue, we attempted to develop the Convbrid
-            Transformer, a custom hybrid CNN-ViT architecture that incorporates
+            In this project, the tendency of ViTs to overfit and struggle with learning local information was validated
+            on small-scale datasets, using CIFAR-10 and CIFAR-100. Then, to address this issue, the Convbrid
+            Transformer was developed. This is a custom hybrid CNN-ViT architecture that incorporates
             locality inductive biases. During the initial stages of training, Convbrid uses attention masks to limit attention
             to local patches, mimicking the locality behavior of CNNs. This constraint encourages the model to learn spatial locality
             early on during training without the need of large datasets for the model to learn inductive biases.
@@ -356,15 +356,22 @@
 			the attention mechanism in Convbrid needs to be modified to operate in a localized manner, which resembles the small
 			receptive field in a convolutional kernel. <br></br>
 			
-			Thus, each attention layer in the Convbrid is masked. In a similar manner to a convolutional layer, a kernel size 
+			Thus, each attention layer in the Convbrid is masked, to create a ConvAttention layer. In a similar manner to a convolutional layer, a kernel size 
 			can be chosen. This defines the size of the "neighborhood" of tokens that a given token can attend to. Here, each token represents
 			a patch in the original image. If k is the kernel size, then each token t interacts with the nearby tokens N(t), which are the tokens
 			corresponding to the patches in its k x k neighborhood (except boundary tokens). <br></br>
 			
 			The stride can be similarly defined, where for
 			only a subset of tokens t is N(t) considered. This subset corresponds to the kernel centers in a convolutional layer 
-			with the same strie. After the masked self-attention, there is a pooling layer to pool the (up to k^2) attention
-			scores for each token. This is followed by a multi-layer perceptron.  <br></br>
+			with the same strie.  <br></br>
+			
+			After the masked self-attention, there is a pooling layer to pool the (up to k^2) attention
+			scores for each token. This is followed by a multi-layer perceptron (MLP). Throughout the rest of 
+			this discussion, a ConvAttention layer refers to one attention layer with its pooling layer and MLP. <br></br>
+
+			It is noted that the pooling layer itself enforces locality. However, this architecture still fundamentally differs from a CNN 
+			in that it dynamically determines the importance of interactions within the kernel rather than applying fixed, learned filters in CNNs.
+			This enables the ConvAttention layer to adapt focus based on the input patches. <br></br>
 
 			INSERT VISUAL FOR ATTENTION MASK<br></br>
 
@@ -384,7 +391,8 @@
 		</div>
 		<div class="main-content-block">
 			<h2>Experiments</h2>
-            We first performed a series of experiments to validate the findings of previous papers that ViTs struggle to
+			<h1>Verifying CNN and Transformer</h1>
+            A series of experiments is first performed to validate the findings of previous papers that ViTs struggle to
             find meaningful relations between image patches close to each other and tend to overfit to the test data.<br><br>
 
             <!--
@@ -400,9 +408,9 @@
             a lot of resources are needed to repeat the results of the paper
             - How we do the masking. Reflecting the behavior of CNN to convert transformer to CNN.
 			-->
-			<h1>Verifying CNN and Transformer</h1>
-            We first repeat the test in <a href="#ref_9">[9]</a>, comparing the performances of a <!--T2T-ViT-14--> transformer
-            <a href="#ref_7">[7]</a> to that of a CNN with the same complexity using the CiFAR-10 and CiFAR-100 datasets 
+			
+            The test in <a href="#ref_9">[9]</a> is repeated, comparing the performances of a <!--T2T-ViT-14--> transformer
+            <a href="#ref_7">[7]</a> to that of a CNN with the same complexity using the CIFAR-10 and CIFAR-100 datasets 
 			(These are small datasets, with training and test datasets containing 50000 and 10000 images respectively). 
 			We aim to quantify the level of improvement with CNN over transformers in the context of these 
 			small datasets, and confirm that the CNN will outperform the transformer. 
@@ -466,17 +474,14 @@
 			
 			For the transformer, TO TRAIN ACTUAL TRANSFORMER WITHOUT LOCALITY <br></br>
 
-			Each model will be run until saturation, using the AdamW optimizer and Cosine Annealing scheduler. <br></br>
-			
-			<h1>Attention Masking</h1>
-			Once attention masking is implemented, the mask will be visualized 
+			Each model is run until saturation, using the AdamW optimizer and Cosine Annealing scheduler. <br></br>
 
 			<h1>Convbrid Transformer</h1>
-			We then create a Convbrid transformer with the exact convolution characteristics of the CNN (similar
-            layers and kernel sizes) and compare its performance on the CiFAR-10 and CiFAR-100 datasets with the two aforementioned models. 
-			We expect the Convbrid model to perform similarly if not better than the CNN.<br><br>
+			A Convbrid transformer was then created with the exact convolution characteristics of the CNN (similar
+            layers and kernel sizes) and compare its performance on the CIFAR-10 and CIFAR-100 datasets with the two aforementioned models. 
+			The Convbrid model is expected to perform similarly if not better than the CNN.<br><br>
 
-            After this initial step, we aim to explore different ways of manipulating the Convbrid kernel sizes, and 
+            After this initial step, the aim is to explore different ways of manipulating the Convbrid kernel sizes, and 
 			analyse how they affect performance, expanding to larger datasets such as ImageNet-1K <a href="#ref_10">[10]</a><br>.
 		</div>
 		<div class="margin-right-block">
@@ -488,7 +493,42 @@
 		</div>
 		<div class="main-content-block">
 			<h2>Results</h2>
+
+			<h1>Evaluating the CNN and Transformer</h1>
+			The CNN was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
+			how long it takes for the training accuracy to plateau, which is determined by INSERT GOOD METRIC FOR WHEN ITS 
+			SATURATED. As expected in INSERT FIGURE, the CNN outperforms the transformer.
 			
+			<h1>ConvAttention</h1>
+			The attention masks were visualized INSERT IMAGES and it was found that it resembles a convolutional layer in enforcing locality.
+			Higher attention appears to be given to tokens near edges or areas with abrupt color transitions. This suggests that
+			the attention mechanism is inherently able to detect significant local features, just as in a CNN. <br></br>
+
+			SHOULD WE ALSO VISUALIZE THE CNN Kernel<br></br>
+
+			<h1>ConvBrid</h1>
+			During the training of the ConvBrid model, the transition from ConvAttention (with kernel size = 5) to a transformer (without masking) 
+			is triggered when the ConvAttention module reaches saturation, indicated by the training accuracy plateauing. For CIFAR-10 and 
+			CIFAR-100, this corresponds to epochs _ and _ respectively.<br></br>
+
+			INSERT FIGURE  <br></br>
+
+
+
+
+
+
+			</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="implications_and_limitations">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h2>Further Work</h2>
+			Let's end with some discussion of the implications and limitations.
 		</div>
 		<div class="margin-right-block">
 		</div>
