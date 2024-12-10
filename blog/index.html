@@ -392,6 +392,8 @@
 			in that it dynamically determines the importance of interactions within the kernel rather than applying fixed, learned filters in CNNs.
 			This enables the ConvAttention layer to adapt focus based on the input patches. <br></br>
 
+			Need to mention when ConvAttention is used, position embeding is not necessary, as the attention masking already capture the positional information.
+
 			INSERT VISUAL FOR ATTENTION MASK<br></br>
 
 			INSERT VISUAL FOR ATTENTION LAYER<br></br>
@@ -432,8 +434,12 @@
             <a href="#ref_7">[7]</a> to that of a CNN with the same complexity using the CIFAR-10 and CIFAR-100 datasets 
 			(These are small datasets, with training and test datasets containing 50000 and 10000 images respectively). 
 			We aim to quantify the level of improvement with CNN over transformers in the context of these 
-			small datasets, and confirm that the CNN will outperform the transformer. 
-			<br></br>
+			small datasets, and confirm that the CNN will outperform the transformer. <br></br>
+
+			The bench marking CNN is constructed so that equivalent architectures using ConvAttention layers can be created. The networks are composed of an initial embedding layer, utilizing Torch built-in
+			2-dimentional convolution layer with the kernel size of 3x3 and the stride and padding of 1 to dirrectly map 1024 pixels to 1024 initial tokens. The embedding size of the token is chosen to be 64
+			and are kept so through out the layers. The tokens are then passed through 6 convolution blocks as described bellow. For the CNN we built the convolution blocks with two simple convolution layers
+			with MLP layers in between and after wards. This is to make traditional convolution block perform and have the same complexity as the ConvAttention block. <br></br>
 			
 			<table>
 				<thead>
@@ -491,7 +497,7 @@
 				</tbody>
 			</table>
 			
-			For the transformer, TO TRAIN ACTUAL TRANSFORMER WITHOUT LOCALITY <br></br>
+			For the transformer, descrive the <br></br>
 
 			Each model is run until saturation, using the AdamW optimizer and Cosine Annealing scheduler. <br></br>
 
