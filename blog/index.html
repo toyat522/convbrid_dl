@@ -344,7 +344,9 @@
             global relationships. By being active throughout the training process, the MLP may inhibit the ViT's ability
             to exploit its full potential for modeling long-range dependencies.<br><br>
 
-            Another approach is to use a small CNN in as a regularizer to  <a href="#ref_9">[9]</a>.
+            Another approach is to use a small CNN in as a regularizer to guide the local feature learning of ViTs <a href="#ref_9">[9]</a>.
+            In addition to the transformer layers, a small pre-trained CNN runs parallel with the downsampled image, and after each layer,
+            the architecture minimizes the L2 loss between the CNN output and the transformer output.
 
             Lastly, a notable advancement in tackling this challenge is the T2T-ViT (Tokens-to-Token Vision Transformer) architecture,
             which combines multi-layer perceptrons (MLPs) for progressive tokenization of image structures with an efficient CNN-inspired
