@@ -378,11 +378,11 @@
 		<div class="main-content-block">
 			<h2>Convbrid Architecture</h2>
 			
-			The Convbrid transformer aims to emulate the behavior of the convoluational layers in traditional CNNs. To this end,
-			the attention mechanism in Convbrid needs to be modified to operate in a localized manner, which resembles the small
-			receptive field in a convolutional kernel. <br></br>
-			
-			Thus, each attention layer in the Convbrid is masked, to create a ConvAttention layer. In a similar manner to a convolutional layer, a kernel size 
+			The Convbrid transformer aims to emulate the behavior of extracting data from an image patch by performing convolution
+            of a given kernel size as in a traditional CNNs. To this end, we developed the ConvAttention layer,
+			the attention mechanism in Convbrid was modified to operate in a localized manner, which resembles the small
+			receptive field in a convolutional kernel. Thus, each attention layer in the Convbrid is masked, to create a ConvAttention layer.
+            In a similar manner to a convolutional layer, a kernel size 
 			can be chosen. This defines the size of the "neighborhood" of tokens that a given token can attend to. Here, each token represents
 			a patch in the original image. 
 			<p>
@@ -540,16 +540,17 @@
 				</tbody>
 			</table>
 			
-			For the transformer, descrive the <br></br>
+			For the transformer, TO TRAIN ACTUAL TRANSFORMER WITHOUT LOCALITY <br><br>
 
-			Each model is run until saturation, using the AdamW optimizer and Cosine Annealing scheduler. <br></br>
+			Each model is run until saturation, using the AdamW optimizer and Cosine Annealing scheduler. <br><br>
 
 			<h1>ConvAttention v.s. CNN</h1>
-			To verify the functionality of the ConvAttention layer, models created using ConvAttention and CNN layers with the same complexity (explain what same complexity mean) ar compared. <br></br>
+			To verify the functionality of the ConvAttention layer, models created using ConvAttention and CNN layers with
+            the same complexity (explain what same complexity mean) ar compared. <br><br>
 
-			We except similar behaviour and validation accuracy. Although ConvAttention take more time to train. <br></br>
+			We except similar behaviour and validation accuracy. Although ConvAttention take more time to train. <br><br>
 
-			Discuss the attention visualization of the ConvAttention model <br></br>
+			Discuss the attention visualization of the ConvAttention model <br><br>
 
 			<h1>Convbrid Transformer</h1>
 			A Convbrid transformer was then created with the exact convolution characteristics of the CNN (similar
