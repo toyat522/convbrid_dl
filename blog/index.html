@@ -384,15 +384,50 @@
 			
 			Thus, each attention layer in the Convbrid is masked, to create a ConvAttention layer. In a similar manner to a convolutional layer, a kernel size 
 			can be chosen. This defines the size of the "neighborhood" of tokens that a given token can attend to. Here, each token represents
-			a patch in the original image. If k is the kernel size, then each token t interacts with the nearby tokens N(t), which are the tokens
-			corresponding to the patches in its k x k neighborhood (except boundary tokens). <br></br>
-			
-			The stride can be similarly defined, where for
-			only a subset of tokens t is N(t) considered. This subset corresponds to the kernel centers in a convolutional layer 
-			with the same stride.  <br></br>
-			
-			After the masked self-attention, there is a pooling layer to pool the (up to k^2) attention
-			scores for each token. This is followed by a multi-layer perceptron (MLP). Throughout the rest of 
+			a patch in the original image. 
+			<p>
+				If 
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<mi>k</mi>
+				</math>
+				is the kernel size, then each token 
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<mi>t</mi>
+				</math>
+				interacts with the nearby tokens 
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<mi>N</mi><mo>(</mo><mi>t</mi><mo>)</mo>
+				</math>, which are the tokens corresponding to the patches in its 
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<mi>k</mi>
+					<mo>&#xD7;</mo>
+					<mi>k</mi>
+				</math>
+				neighborhood (including padding tokens).
+			</p>
+			<p>
+				The stride can be similarly defined, where for only a subset of tokens 
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<mi>t</mi>
+				</math>
+				is 
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<mi>N</mi><mo>(</mo><mi>t</mi><mo>)</mo>
+				</math>
+				considered. This subset corresponds to the centers of the kernels in the 
+				corresponding convolutional layer with the same stride.
+			</p>
+			<p>
+				After the masked self-attention, there is a pooling layer to pool the (up to 
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<msup>
+						<mi>k</mi>
+						<mn>2</mn>
+					</msup>
+				</math>
+				) attention scores for each token.
+			</p>
+		 This is followed by a multi-layer perceptron (MLP). Throughout the rest of 
 			this discussion, a ConvAttention layer refers to one attention layer with its pooling layer and MLP. <br></br>
 
 			It is noted that the pooling layer itself enforces locality. However, this architecture still fundamentally differs from a CNN 
@@ -403,11 +438,12 @@
 
 			INSERT VISUAL FOR ATTENTION MASK<br></br>
 
-			INSERT VISUAL FOR ATTENTION LAYER<br></br>
+			<img src="./images/model.png" width="256px">
 
 			In order to harness the strengths of both ViTs (in global context understanding) and CNNs (in local patterns), Convbrid
 			starts training with a small kernel size, and then the mask is removed after some epochs (which can also be set) so that 
 			it functions like a transformer.<br></br>
+
 	
 		</div>
 		<div class="margin-right-block">
@@ -538,7 +574,7 @@
 			how long it takes for the training accuracy to plateau, which is determined by when 5 epochs do not change
 			training accuracy by 1%. 
 
-			<img src="./images/training_stats.png" width=512px/>
+			<img src="./images/training_stats.png" width=1024px/>
 			The above figure demonstrates the performances of the various models on CIFAR-10 and CIFAR-100. The 
 			accuracies shown in the figure are the best validation accuracy up to that point. As expected, the CNN outperforms the
 			transformer.
