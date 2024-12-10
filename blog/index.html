@@ -385,7 +385,7 @@
 			
 			The stride can be similarly defined, where for
 			only a subset of tokens t is N(t) considered. This subset corresponds to the kernel centers in a convolutional layer 
-			with the same strie.  <br></br>
+			with the same stride.  <br></br>
 			
 			After the masked self-attention, there is a pooling layer to pool the (up to k^2) attention
 			scores for each token. This is followed by a multi-layer perceptron (MLP). Throughout the rest of 
@@ -563,7 +563,7 @@
 		<div class="main-content-block">
 			<h2>Further Work</h2>
 			A further attempt was to change the ConvBrid kernel sizes more fluidly during the training process. The changed ConvBrid
-			model will take as input a function from epoch to kernel size, so that by inputting a slowly growing function,
+			model takes as input a function from epoch to kernel size, so that by inputting a slowly growing function,
 			the model will learn progressively broader contextual information. It aims to mimic a hierarchical learning process which
 			will be more efficient. <br></br>
 
@@ -586,7 +586,14 @@
 				<mo>&#xD7;</mo>
 				<mi>num_channels</mi>
 			</math>, if the current kernel size
-			is less then the corresponding weights for the tokens outside the kernel will not be updated in the training pass.
+			is less than the corresponding weights, the tokens outside the kernel will not be updated in the training pass. Thus, a custom
+			backward pass in the linear pooling layer was implemented to enable the layer to do this selective dropout. <br></br>
+			
+			As of now, the model set at kernel = 5 is only able to reach 52% accuracy. This probably points to further debugging that has to be
+			done. Theoretically, it should be able to perform comparably to the initial ConvBrid model, if not better. <br></br>
+
+
+			
 		</div>
 		<div class="margin-right-block">
 		</div>
