@@ -279,12 +279,14 @@
 
 	<div class="content-margin-container" id="intro">
 		<div class="margin-left-block">
-			<!-- table of contents here -->
 			<div style="position:fixed; max-width:inherit; top:max(20%,120px)">
 				<b style="font-size:16px">Outline</b><br><br>
 				<a href="#intro">Introduction</a><br><br>
-				<a href="#does_x_do_y">Does X do Y?</a><br><br>
-				<a href="#implications_and_limitations">Implications and limitations</a><br><br>
+				<a href="#convbrid">Convbrid Architecture</a><br><br>
+				<a href="#experiments">Experiments</a><br><br>
+				<a href="#results">Results</a><br><br>
+				<a href="#further_work">Further Work</a><br><br>
+				<a href="#conclusion">Conclusion</a><br><br>
 			</div>
 		</div>
 	</div>
@@ -328,16 +330,31 @@
 		</div>
 	</div>
 
-	<div class="content-margin-container" id="does_x_do_y">
+	<div class="content-margin-container" id="bg_and_rel_work">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
 			<h1>Background and Related Work</h1>
-            Some prior work has been done on mitigating the lack of inductive bias on ViTs. For instance, Li et. al proposed adding a small
-            multi-layer perception (MLP) <!-- TODO WHAT THE FRICK IS GOING ON -->
-            to the architecture to learn relative distances in the image from the patch embeddings <a href="#ref_6">[6]</a> has been
-            shown to improve performance. Using MLPs to successively tokenize the image is another way to capture local
-            structures <a href="#ref_7">[7]</a>. Convbrid will provide a closer imitation of the CNNs with the desirable inductive
+            Some prior work has aimed to address the lack of inductive bias in Vision Transformers (ViTs). For instance, Li
+            et al. proposed adding a small multi-layer perceptron (MLP) to the architecture to penalize pairs of token embeddings
+            with large relative distances <a href="#ref_6">[6]</a>. Since the MLP functions independently of the original
+            architecture, it is inherently architecture-agnostic. Results show that this additional loss consistently enhances
+            the accuracy of ViTs across all tested datasets, with improvements ranging from modest to significant. However,
+            a notable limitation is that the MLP constrains the transformer from fully leveraging its capacity to learn
+            global relationships. By being active throughout the training process, the MLP may inhibit the ViT's ability
+            to exploit its full potential for modeling long-range dependencies.<br><br>
+
+            Another approach is to use a small CNN in as a regularizer to  <a href="#ref_9">[9]</a>.
+
+            Lastly, a notable advancement in tackling this challenge is the T2T-ViT (Tokens-to-Token Vision Transformer) architecture,
+            which combines multi-layer perceptrons (MLPs) for progressive tokenization of image structures with an efficient CNN-inspired
+            deep-narrow backbone to model global attention relations on tokens <a href="#ref_7">[7]</a>. This dual approach enables the T2T-ViT
+            to effectively capture local image details while simultaneously leveraging global context through attention mechanisms.
+            By combining these capabilities, the T2T-ViT demonstrates superior or comparable performance to CNNs of similar complexity,
+            such as ResNets and MobileNets. This highlights the importance of incorporating locality guidance into Vision Transformers,
+            addressing their inherent lack of inductive bias and improving their efficiency in learning from midsize datasets.<br><br>
+
+            Convbrid will provide a closer imitation of the CNNs with the desirable inductive
             bias. It has also been shown that careful tokenization can overcome the need for large datasets in
             transformers. <a href="#ref_8">[8]</a>. 
 		</div>
@@ -346,7 +363,7 @@
 		</div>
 	</div>
 
-	<div class="content-margin-container" id="Convbrid">
+	<div class="content-margin-container" id="convbrid">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
@@ -386,7 +403,7 @@
 		</div>
 	</div>
 
-	<div class="content-margin-container" id="implications_and_limitations">
+	<div class="content-margin-container" id="experiments">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
@@ -488,7 +505,7 @@
 		</div>
 	</div>
 
-	<div class="content-margin-container" id="implications_and_limitations">
+	<div class="content-margin-container" id="results">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
@@ -524,7 +541,7 @@
 	</div>
 
 	<!-- REMOVE IF THERES ENOUGH THINGS TO SAY-->
-	<div class="content-margin-container" id="implications_and_limitations">
+	<div class="content-margin-container" id="further_work">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
@@ -541,7 +558,7 @@
 		</div>
 	</div>
 
-	<div class="content-margin-container" id="implications_and_limitations">
+	<div class="content-margin-container" id="conclusion">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
