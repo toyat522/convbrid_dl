@@ -293,7 +293,7 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Introduction</h1>
+			<h2>Introduction</h2>
             Vision Transformers (ViTs) adapt the standard transformer architecture, originally designed for natural
             language processing, to computer vision tasks. They process images by dividing them into patches and treating
             these patches as a sequence of inputs to the transformer. ViTs have demonstrated improved performance compared
@@ -350,7 +350,7 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Convbrid Architecture</h1>
+			<h2>Convbrid Architecture</h2>
 			
 			The Convbrid transformer aims to emulate the behavior of the convoluational layers in traditional CNNs. To this end,
 			the attention mechanism in Convbrid needs to be modified to operate in a localized manner, which resembles the small
@@ -383,7 +383,7 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Experiments</h1>
+			<h2>Experiments</h2>
             We first performed a series of experiments to validate the findings of previous papers that ViTs struggle to
             find meaningful relations between image patches close to each other and tend to overfit to the test data.<br><br>
 
@@ -400,7 +400,7 @@
             a lot of resources are needed to repeat the results of the paper
             - How we do the masking. Reflecting the behavior of CNN to convert transformer to CNN.
 			-->
-			<h2>Verifying CNN and Transformer</h2>
+			<h1>Verifying CNN and Transformer</h1>
             We first repeat the test in <a href="#ref_9">[9]</a>, comparing the performances of a <!--T2T-ViT-14--> transformer
             <a href="#ref_7">[7]</a> to that of a CNN with the same complexity using the CiFAR-10 and CiFAR-100 datasets 
 			(These are small datasets, with training and test datasets containing 50000 and 10000 images respectively). 
@@ -468,10 +468,10 @@
 
 			Each model will be run until saturation, using the AdamW optimizer and Cosine Annealing scheduler. <br></br>
 			
-			<h2>Attention Masking</h2>
+			<h1>Attention Masking</h1>
 			Once attention masking is implemented, the mask will be visualized 
 
-			<h2>Convbrid Transformer</h2>
+			<h1>Convbrid Transformer</h1>
 			We then create a Convbrid transformer with the exact convolution characteristics of the CNN (similar
             layers and kernel sizes) and compare its performance on the CiFAR-10 and CiFAR-100 datasets with the two aforementioned models. 
 			We expect the Convbrid model to perform similarly if not better than the CNN.<br><br>
@@ -487,7 +487,7 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Results</h1>
+			<h2>Results</h2>
 			
 		</div>
 		<div class="margin-right-block">
@@ -498,7 +498,7 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Conclusion</h1>
+			<h2>Conclusion</h2>
 			Let's end with some discussion of the implications and limitations.
 		</div>
 		<div class="margin-right-block">
