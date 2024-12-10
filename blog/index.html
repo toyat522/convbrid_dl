@@ -324,7 +324,7 @@
             to local patches, mimicking the locality behavior of CNNs. This constraint encourages the model to learn spatial locality
             early on during training without the need of large datasets for the model to learn inductive biases.
             By combining the spatial awareness of convolutional layers with the global attention capabilities of
-            transformers, this design facilitates more efficient training on smaller datasets.<br></br>
+            transformers, this design facilitates more efficient training on smaller datasets.<br><br>
 		</div>
 		<div class="margin-right-block">
 		</div>
@@ -344,9 +344,13 @@
             global relationships. By being active throughout the training process, the MLP may inhibit the ViT's ability
             to exploit its full potential for modeling long-range dependencies.<br><br>
 
-            Another approach is to use a small CNN in as a regularizer to guide the local feature learning of ViTs <a href="#ref_9">[9]</a>.
-            In addition to the transformer layers, a small pre-trained CNN runs parallel with the downsampled image, and after each layer,
-            the architecture minimizes the L2 loss between the CNN output and the transformer output.
+            Another approach involves using a small CNN as a regularizer to guide the local feature learning of Vision Transformers
+            (ViTs) <a href="#ref_9">[9]</a>. In this method, a lightweight, pre-trained CNN operates in parallel with the downsampled
+            image alongside the transformer layers. After each transformer layer, the architecture minimizes the L2 loss between the
+            output of the CNN and that of the transformer. This process distills locality knowledge from the CNN into the ViT’s hidden
+            layers during training, with the CNN outputs being discarded during inference. Consistent with previous studies, results
+            show that on small datasets such as CIFAR-100, this approach leads to up to a 13% improvement over the baseline transformer model.
+            <br><br>
 
             Lastly, a notable advancement in tackling this challenge is the T2T-ViT (Tokens-to-Token Vision Transformer) architecture,
             which combines multi-layer perceptrons (MLPs) for progressive tokenization of image structures with an efficient CNN-inspired
@@ -356,9 +360,12 @@
             such as ResNets and MobileNets. This highlights the importance of incorporating locality guidance into Vision Transformers,
             addressing their inherent lack of inductive bias and improving their efficiency in learning from midsize datasets.<br><br>
 
-            Convbrid will provide a closer imitation of the CNNs with the desirable inductive
-            bias. It has also been shown that careful tokenization can overcome the need for large datasets in
-            transformers. <a href="#ref_8">[8]</a>. 
+            Compared to previous methods, our Convbrid architecture offers a more direct imitation of CNNs by initially restricting
+            attention to local patches. However, as training progresses, the attention masks are removed, allowing the model to
+            integrate global information alongside the local features learned in the earlier stages of training. We hypothesize that
+            this novel training approach will enable the transformer to learn local features more quickly than traditional ViTs,
+            without compromising its ability to capture global dependencies. This method aims to find a balance between efficiently learning
+            locality and maintaining the transformer's capacity for global attention.
 		</div>
 		<div class="margin-right-block" style="transform: translate(0%, -100%);">
 		    <!-- you can move the margin notes up and down with translate -->
@@ -382,7 +389,7 @@
 			
 			The stride can be similarly defined, where for
 			only a subset of tokens t is N(t) considered. This subset corresponds to the kernel centers in a convolutional layer 
-			with the same strie.  <br></br>
+			with the same stride.  <br></br>
 			
 			After the masked self-attention, there is a pooling layer to pool the (up to k^2) attention
 			scores for each token. This is followed by a multi-layer perceptron (MLP). Throughout the rest of 
@@ -528,17 +535,20 @@
 
 			<h1>Evaluating the CNN and Transformer</h1>
 			The CNN was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
-			how long it takes for the training accuracy to plateau, which is determined by INSERT GOOD METRIC FOR WHEN ITS 
-			SATURATED. As expected in INSERT FIGURE, the CNN outperforms the transformer. <br></br>
+			how long it takes for the training accuracy to plateau, which is determined by when 5 epochs do not change
+			training accuracy by 1%. 
 
-			Need to explain that the figure shows the upper bound of the validating accuracy. <br></br>
+			<img src="./images/training_stats.png" width=512px/>
+			The above figure demonstrates the performances of the various models on CIFAR-10 and CIFAR-100. The 
+			accuracies shown in the figure are the best validation accuracy up to that point. As expected, the CNN outperforms the
+			transformer.
 			
 			<h1>ConvAttention</h1>
 			The attention masks were visualized INSERT IMAGES and it was found that it resembles a convolutional layer in enforcing locality.
 			Higher attention appears to be given to tokens near edges or areas with abrupt color transitions. This suggests that
 			the attention mechanism is inherently able to detect significant local features, just as in a CNN. <br></br>
 
-			SHOULD WE ALSO VISUALIZE THE CNN Kernel<br></br>
+			<img src="./images/conv_attention_visualization_cifar10.png" width=512px/>
 
 			<h1>ConvBrid</h1>
 			Discussing the attention visualization of the ConvBrid model <br></br>
@@ -549,15 +559,8 @@
 			Discuss that the restricting mechanism is satisfy with the pooling alone and the attention masking is not necessary. This is still an interesting result. However, it create a diffuculty in transitioning between ConvAttention and traditional transfomer. <br></br>
 
 			During the training of the ConvBrid model, the transition from ConvAttention (with kernel size = 5) to a transformer (without masking) 
-			is triggered when the ConvAttention module reaches saturation, indicated by the training accuracy plateauing. For CIFAR-10 and 
-			CIFAR-100, this corresponds to epochs _ and _ respectively.<br></br>
-
-			INSERT FIGURE  <br></br>
-
-
-
-
-
+			is triggered when the ConvAttention module reaches saturation, indicated by the training accuracy nearly plateauing. For CIFAR-10 and 
+			CIFAR-100, this corresponds to epochs 15 and 80 respectively, as represented in the figure above.<br></br>
 
 			</div>
 		<div class="margin-right-block">
@@ -571,7 +574,7 @@
 		<div class="main-content-block">
 			<h2>Further Work</h2>
 			A further attempt was to change the ConvBrid kernel sizes more fluidly during the training process. The changed ConvBrid
-			model will take as input a function from epoch to kernel size, so that by inputting a slowly growing function,
+			model takes as input a function from epoch to kernel size, so that by inputting a slowly growing function,
 			the model will learn progressively broader contextual information. It aims to mimic a hierarchical learning process which
 			will be more efficient. <br></br>
 
@@ -594,7 +597,12 @@
 				<mo>&#xD7;</mo>
 				<mi>num_channels</mi>
 			</math>, if the current kernel size
-			is less then the corresponding weights for the tokens outside the kernel will not be updated in the training pass.
+			is less than the corresponding weights, the tokens outside the kernel will not be updated in the training pass. Thus, a custom
+			backward pass in the linear pooling layer was implemented to enable the layer to do this selective dropout. <br></br>
+			
+			As of now, the model set at kernel = 5 is only able to reach 52% accuracy. This probably points to further debugging that has to be
+			done. Theoretically, it should be able to perform comparably to the initial ConvBrid model, if not better. <br></br>
+			
 		</div>
 		<div class="margin-right-block">
 		</div>
