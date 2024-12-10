@@ -561,14 +561,24 @@
 			<h2>Results</h2>
 
 			<h1>Evaluating the CNN and Transformer</h1>
-			The CNN was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
+            TODO MOVE THIS TO EXPERIMENTS
+			Each model was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
 			how long it takes for the training accuracy to plateau, which is determined by when 2 epochs do not change
 			training accuracy by 1%. 
 
 			<img src="./images/training_stats.png" width=900px/>
-			The above figure demonstrates the performances of the various models on CIFAR-10 and CIFAR-100. The 
-			accuracies shown in the figure are the best validation accuracy up to that point. As expected, the CNN outperforms the
-			transformer.
+
+            The figure above illustrates the performance of various models on CIFAR-10 and CIFAR-100, showing the best
+            validation accuracy achieved up to each point. From the curve, we confirm the findings of previous studies that
+            CNNs outperform transformers, achieving up to 88% accuracy compared to the transformer’s 80%. Furthermore, our model
+            using ConvAttention layers closely aligns with the CNN results, particularly for the larger CIFAR-100 model. This
+            provides evidence that ConvAttention is functioning as expected, effectively mimicking CNN behavior. However, it was
+            surprising that the ConvBrid model did not perform better than ConvAttention, a result we will discuss further in a later section.<br><br>
+
+			<h1>Traditional ViT</h1>
+            For traditional ViTs, we 
+            
+			<img src="./images/transformer_attn.png" width=850px/>
 			
 			<h1>ConvAttention</h1>
             In addition to comparing the validation loss and accuracy curves, we visualized the average attention map for the
@@ -583,7 +593,7 @@
 			<h1>ConvBrid</h1>
             Below are the attention maps for our ConvBrid model:<br><br>
 			
-			<img src="./images/conv_attention_visualization_cifar10.png" width=850px/>
+			<img src="./images/convbrid_attn_.png" width=850px/>
 
 			It was found that the switching mechanism does not work as intended. Discuss the TradAttention model, explaining that is the ConvAttention without attention masking (but with pooling). This model behavae exactly like the ConvAttention.
 			Discuss that the restricting mechanism is satisfy with the pooling alone and the attention masking is not necessary. This is still an interesting result. However, it create a diffuculty in transitioning between ConvAttention and traditional transfomer. <br></br>
