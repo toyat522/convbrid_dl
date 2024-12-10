@@ -324,7 +324,7 @@
             to local patches, mimicking the locality behavior of CNNs. This constraint encourages the model to learn spatial locality
             early on during training without the need of large datasets for the model to learn inductive biases.
             By combining the spatial awareness of convolutional layers with the global attention capabilities of
-            transformers, this design facilitates more efficient training on smaller datasets.<br></br>
+            transformers, this design facilitates more efficient training on smaller datasets.<br><br>
 		</div>
 		<div class="margin-right-block">
 		</div>
@@ -350,6 +350,7 @@
             output of the CNN and that of the transformer. This process distills locality knowledge from the CNN into the ViT’s hidden
             layers during training, with the CNN outputs being discarded during inference. Consistent with previous studies, results
             show that on small datasets such as CIFAR-100, this approach leads to up to a 13% improvement over the baseline transformer model.
+            <br><br>
 
             Lastly, a notable advancement in tackling this challenge is the T2T-ViT (Tokens-to-Token Vision Transformer) architecture,
             which combines multi-layer perceptrons (MLPs) for progressive tokenization of image structures with an efficient CNN-inspired
@@ -359,9 +360,12 @@
             such as ResNets and MobileNets. This highlights the importance of incorporating locality guidance into Vision Transformers,
             addressing their inherent lack of inductive bias and improving their efficiency in learning from midsize datasets.<br><br>
 
-            Convbrid will provide a closer imitation of the CNNs with the desirable inductive
-            bias. It has also been shown that careful tokenization can overcome the need for large datasets in
-            transformers. <a href="#ref_8">[8]</a>. 
+            Compared to previous methods, our Convbrid architecture offers a more direct imitation of CNNs by initially restricting
+            attention to local patches. However, as training progresses, the attention masks are removed, allowing the model to
+            integrate global information alongside the local features learned in the earlier stages of training. We hypothesize that
+            this novel training approach will enable the transformer to learn local features more quickly than traditional ViTs,
+            without compromising its ability to capture global dependencies. This method aims to find a balance between efficiently learning
+            locality and maintaining the transformer's capacity for global attention.
 		</div>
 		<div class="margin-right-block" style="transform: translate(0%, -100%);">
 		    <!-- you can move the margin notes up and down with translate -->
