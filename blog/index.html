@@ -238,7 +238,7 @@
 		}
 	</style>
 
-	<title>Convbrid Transformer: Enforcing Locality via CNN-like Attention Masking</title>
+	<title>ConvBrid Transformer: Enforcing Locality via CNN-like Attention Masking</title>
 	<meta property="og:title" content="The Platonic Representation Hypothesis" />
 	<meta charset="UTF-8">
 </head>
@@ -254,7 +254,7 @@
 					<td colspan=4>
 						<span
 							style="font-size: 32px; font-family: 'Courier New', Courier, monospace; /* Adds fallbacks */">
-							Convbrid Transformer: Enforcing Locality via CNN-like Attention Masking
+							ConvBrid Transformer: Enforcing Locality via CNN-like Attention Masking
 						</span>
 					</td>
 				</tr>
@@ -282,7 +282,7 @@
 			<div style="position:fixed; max-width:inherit; top:max(20%,120px)">
 				<b style="font-size:16px">Outline</b><br><br>
 				<a href="#intro">Introduction</a><br><br>
-				<a href="#convbrid">Convbrid Architecture</a><br><br>
+				<a href="#convbrid">ConvBrid Architecture</a><br><br>
 				<a href="#experiments">Experiments</a><br><br>
 				<a href="#results">Results</a><br><br>
 				<a href="#further_work">Further Work</a><br><br>
@@ -318,9 +318,9 @@
             large-scale datasets, such as medical imaging <a href="#ref_7">[7]</a>.<br></br>
 
             In this project, the tendency of ViTs to overfit and struggle with learning local information was validated
-            on small-scale datasets, using CIFAR-10 and CIFAR-100. Then, to address this issue, the Convbrid
+            on small-scale datasets, using CIFAR-10 and CIFAR-100. Then, to address this issue, the ConvBrid
             Transformer was developed. This is a custom hybrid CNN-ViT architecture that incorporates
-            locality inductive biases. During the initial stages of training, Convbrid uses attention masks to limit attention
+            locality inductive biases. During the initial stages of training, ConvBrid uses attention masks to limit attention
             to local patches, mimicking the locality behavior of CNNs. This constraint encourages the model to learn spatial locality
             early on during training without the need of large datasets for the model to learn inductive biases.
             By combining the spatial awareness of convolutional layers with the global attention capabilities of
@@ -360,7 +360,7 @@
             such as ResNets and MobileNets. This highlights the importance of incorporating locality guidance into Vision Transformers,
             addressing their inherent lack of inductive bias and improving their efficiency in learning from midsize datasets.<br><br>
 
-            Compared to previous methods, our Convbrid architecture offers a more direct imitation of CNNs by initially restricting
+            Compared to previous methods, our ConvBrid architecture offers a more direct imitation of CNNs by initially restricting
             attention to local patches. However, as training progresses, the attention masks are removed, allowing the model to
             integrate global information alongside the local features learned in the earlier stages of training. We hypothesize that
             this novel training approach will enable the transformer to learn local features more quickly than traditional ViTs,
@@ -376,9 +376,9 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h2>Convbrid Architecture</h2>
+			<h2>ConvBrid Architecture</h2>
 			
-			The Convbrid transformer aims to emulate the behavior of extracting data from an image patch by performing convolution
+			The ConvBrid transformer aims to emulate the behavior of extracting data from an image patch by performing convolution
             of a given kernel size as in a traditional CNNs. To this end, we developed the ConvAttention block, which is a modified
 			attention mechanism operating in a localized manner, resembling the small
 			receptive field in a convolutional kernel. The ConvAttention block achieves this by masking the attention scores of tokens, 
@@ -429,7 +429,7 @@
 			This enables the ConvAttention layer to adapt focus based on the input patches and potentialy generalize globaly to the whole picture. Additionally, 
 			because our architecture learn localized characteristics via convolution-like attention restrictions, positional embedding may become unnecessary. <br></br>
 
-			In order to harness the strengths of both ViTs (in global context understanding) and CNNs (in local patterns), Convbrid
+			In order to harness the strengths of both ViTs (in global context understanding) and CNNs (in local patterns), ConvBrid
 			starts training with a small kernel size, and then the attention masks are removed after some epochs (which can also be set) so that 
 			it functions like a transformer. We also investigate a more dynamics stratergy of transitioning via a slow relax of the kernel size and pooling characteristics.<br></br>
 
@@ -542,12 +542,12 @@
 
 			Discuss the attention visualization of the ConvAttention model <br><br>
 
-			<h1>Convbrid Transformer</h1>
-			A Convbrid transformer was then created with the exact convolution characteristics of the CNN (similar
+			<h1>ConvBrid Transformer</h1>
+			A ConvBrid transformer was then created with the exact convolution characteristics of the CNN (similar
             layers and kernel sizes) and compare its performance on the CIFAR-10 and CIFAR-100 datasets with the two aforementioned models. 
-			The Convbrid model is expected to perform similarly if not better than the CNN.<br><br>
+			The ConvBrid model is expected to perform similarly if not better than the CNN.<br><br>
 
-            After this initial step, the aim is to explore different ways of manipulating the Convbrid kernel sizes, and 
+            After this initial step, the aim is to explore different ways of manipulating the ConvBrid kernel sizes, and 
 			analyse how they affect performance, expanding to larger datasets such as ImageNet-1K <a href="#ref_10">[10]</a><br>.
 		</div>
 		<div class="margin-right-block">
@@ -573,12 +573,17 @@
             CNNs outperform transformers, achieving up to 88% accuracy compared to the transformer’s 80%. Furthermore, our model
             using ConvAttention layers closely aligns with the CNN results, particularly for the larger CIFAR-100 model. This
             provides evidence that ConvAttention is functioning as expected, effectively mimicking CNN behavior. However, it was
-            surprising that the ConvBrid model did not perform better than ConvAttention, a result we will discuss further in a later section.<br><br>
+            surprising that the ConvBrid model did not perform better than ConvAttention, which we will discuss further in the ConvBrid
+            results section.<br><br>
 
 			<h1>Traditional ViT</h1>
-            For traditional ViTs, we 
-            
 			<img src="./images/transformer_attn.png" width=850px/>
+
+            Traditional ViTs clearly exhibit overfitting to the data, as shown above. For instance, in the image of the car,
+            the tokens focus on the red background rather than the car itself, indicating poor generalization. This overfitting
+            is further highlighted in the previous graph, where the validation accuracy for the traditional transformer plateaus
+            at an earlier epoch compared to the other models. As predicted, ViTs require a larger dataset to effectively learn and
+            capture fundamental local features, which they struggle to extract when trained on smaller datasets.<br><br>
 			
 			<h1>ConvAttention</h1>
             In addition to comparing the validation loss and accuracy curves, we visualized the average attention map for the
