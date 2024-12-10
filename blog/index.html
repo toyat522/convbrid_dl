@@ -354,6 +354,18 @@
             We first performed a series of experiments to validate the findings of previous papers that ViTs struggle to
             find meaningful relations between image patches close to each other and tend to overfit to the test data.<br><br>
 
+            - Repeat the test in CIFAR 10 and CIFAR 100.
+            - Describe our models and have visuals
+            - Expected behavior
+            - Learn locality -> learn attention better because we are focusing our attention on limited places
+            - CIFAR10 and CIFAR100
+            - Mechanism of releasing the masking
+            - Discuss our results (why the frick did nothing change)
+            - Train a bit faster
+            - Not able to repeat the test of tiny transformer paper because
+            a lot of resources are needed to repeat the results of the paper
+            - How we do the masking. Reflecting the behavior of CNN to convert transformer to CNN.
+
             We first repeat the test in <a href="#ref_9">[9]</a>, comparing the performances of a T2T-ViT-14 transformer
             <a href="#ref_7">[7]</a> to that of a CNN with the same complexity using the CiFAR-100 dataset. We aim to
             reconfirm and quantify the level of improvement with CNN over transformers in the context of smaller datasets.
