@@ -436,8 +436,6 @@
 
 			Need to mention when ConvAttention is used, position embeding is not necessary, as the attention masking already capture the positional information.
 
-			INSERT VISUAL FOR ATTENTION MASK<br></br>
-
 			<img src="./images/model.png" width="256px">
 
 			In order to harness the strengths of both ViTs (in global context understanding) and CNNs (in local patterns), Convbrid
@@ -479,10 +477,11 @@
 			We aim to quantify the level of improvement with CNN over transformers in the context of these 
 			small datasets, and confirm that the CNN will outperform the transformer. <br></br>
 
-			The bench marking CNN is constructed so that equivalent architectures using ConvAttention layers can be created. The networks are composed of an initial embedding layer, utilizing Torch built-in
-			2-dimentional convolution layer with the kernel size of 3x3 and the stride and padding of 1 to dirrectly map 1024 pixels to 1024 initial tokens. The embedding size of the token is chosen to be 64
-			and are kept so through out the layers. The tokens are then passed through 6 convolution blocks as described bellow. For the CNN we built the convolution blocks with two simple convolution layers
-			with MLP layers in between and after wards. This is to make traditional convolution block perform and have the same complexity as the ConvAttention block. <br></br>
+			The bench marking CNN is designed to allow the creation of equivalent architectures using ConvAttention layers. 
+			The networks are composed of an initial embedding layer, implemented using Torch's built-in
+			Conv2D layers with the kernel size of 3 and the stride and padding of 1. This directly map 1024 pixels to 1024 initial tokens. The embedding size of the token is chosen to be 64
+			and this is kept throughout the layers (as number of input and output channels to the convolutional layers). The tokens are then passed through 6 convolution blocks as described bellow. For the CNN we built the convolution blocks with two simple convolution layers
+			with MLP layers in between and afterwards. This is to make traditional convolution block perform and have the same complexity as the ConvAttention block. <br></br>
 			
 			<table>
 				<thead>
@@ -572,7 +571,7 @@
 
 			<h1>Evaluating the CNN and Transformer</h1>
 			The CNN was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
-			how long it takes for the training accuracy to plateau, which is determined by when 5 epochs do not change
+			how long it takes for the training accuracy to plateau, which is determined by when 2 epochs do not change
 			training accuracy by 1%. 
 
 			<img src="./images/training_stats.png" width=1024px/>
