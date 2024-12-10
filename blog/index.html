@@ -524,6 +524,13 @@
 			SHOULD WE ALSO VISUALIZE THE CNN Kernel<br></br>
 
 			<h1>ConvBrid</h1>
+			Discussing the attention visualization of the ConvBrid model <br></br>
+			
+			INSERT FIGURE <br></br>
+
+			It was found that the switching mechanism does not work as intended. Discuss the TradAttention model, explaining that is the ConvAttention without attention masking (but with pooling). This model behavae exactly like the ConvAttention.
+			Discuss that the restricting mechanism is satisfy with the pooling alone and the attention masking is not necessary. This is still an interesting result. However, it create a diffuculty in transitioning between ConvAttention and traditional transfomer. <br></br>
+
 			During the training of the ConvBrid model, the transition from ConvAttention (with kernel size = 5) to a transformer (without masking) 
 			is triggered when the ConvAttention module reaches saturation, indicated by the training accuracy plateauing. For CIFAR-10 and 
 			CIFAR-100, this corresponds to epochs _ and _ respectively.<br></br>
@@ -552,7 +559,25 @@
 			will be more efficient. <br></br>
 
 			However, as the pooling layer in the ConvAttention needs to have a fixed structure across epochs, it has to be initially set
-			to be compatible with the maximum kernel size in the training process. This means 
+			to be compatible with the maximum kernel size in the training process. While in the static case the dimension of the 
+			input is <math xmlns="http://www.w3.org/1998/Math/MathML">
+				<mi>kernel</mi>
+				<msup>
+					<mi></mi>
+					<mn>2</mn>
+				</msup>
+				<mo>&#xD7;</mo>
+				<mi>num_channels</mi>
+			</math>, now it has to be set to <math xmlns="http://www.w3.org/1998/Math/MathML">
+				<mi>max_kernel</mi>
+				<msup>
+					<mi></mi>
+					<mn>2</mn>
+				</msup>
+				<mo>&#xD7;</mo>
+				<mi>num_channels</mi>
+			</math>, if the current kernel size
+			is less then the corresponding weights for the tokens outside the kernel will not be updated in the training pass.
 		</div>
 		<div class="margin-right-block">
 		</div>
