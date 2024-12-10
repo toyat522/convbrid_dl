@@ -379,68 +379,59 @@
 			<h2>Convbrid Architecture</h2>
 			
 			The Convbrid transformer aims to emulate the behavior of extracting data from an image patch by performing convolution
-            of a given kernel size as in a traditional CNNs. To this end, we developed the ConvAttention layer,
-			the attention mechanism in Convbrid was modified to operate in a localized manner, which resembles the small
-			receptive field in a convolutional kernel. Thus, each attention layer in the Convbrid is masked, to create a ConvAttention layer.
-            In a similar manner to a convolutional layer, a kernel size 
-			can be chosen. This defines the size of the "neighborhood" of tokens that a given token can attend to. Here, each token represents
-			a patch in the original image. 
-			<p>
-				If 
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
+            of a given kernel size as in a traditional CNNs. To this end, we developed the ConvAttention block, which is a modified
+			attention mechanism operating in a localized manner, resembling the small
+			receptive field in a convolutional kernel. The ConvAttention block achieves this by masking the attention scores of tokens, 
+			such that each token can only attend to its local "neighborhood". Here, each token represents a pixels in the image.
+            In a similar manner to a convolutional layer, a kernel size can be chosen. This defines the size of the "neighborhood". 
+			If 
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<mi>k</mi>
+			</math>
+			is the kernel size, then each token 
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<mi>t</mi>
+			</math>
+			interacts with the nearby tokens 
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<mi>N</mi><mo>(</mo><mi>t</mi><mo>)</mo>
+			</math>, which are the tokens corresponding to the patches in its 
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<mi>k</mi>
+				<mo>&#xD7;</mo>
+				<mi>k</mi>
+			</math>
+			neighborhood (including padding tokens). The stride can be similarly defined, where for only a subset of tokens 
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<mi>t</mi>
+			</math>
+			is 
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<mi>N</mi><mo>(</mo><mi>t</mi><mo>)</mo>
+			</math>
+			considered. This subset corresponds to the centers of the kernels in the 
+			corresponding convolutional layer with the same stride. After the masked self-attention (and an addiitonal residual layer), a pooling layer combines the 
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<msup>
 					<mi>k</mi>
-				</math>
-				is the kernel size, then each token 
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
-					<mi>t</mi>
-				</math>
-				interacts with the nearby tokens 
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
-					<mi>N</mi><mo>(</mo><mi>t</mi><mo>)</mo>
-				</math>, which are the tokens corresponding to the patches in its 
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
-					<mi>k</mi>
-					<mo>&#xD7;</mo>
-					<mi>k</mi>
-				</math>
-				neighborhood (including padding tokens).
-			</p>
-			<p>
-				The stride can be similarly defined, where for only a subset of tokens 
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
-					<mi>t</mi>
-				</math>
-				is 
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
-					<mi>N</mi><mo>(</mo><mi>t</mi><mo>)</mo>
-				</math>
-				considered. This subset corresponds to the centers of the kernels in the 
-				corresponding convolutional layer with the same stride.
-			</p>
-			<p>
-				After the masked self-attention, there is a pooling layer to pool the (up to 
-				<math xmlns="http://www.w3.org/1998/Math/MathML">
-					<msup>
-						<mi>k</mi>
-						<mn>2</mn>
-					</msup>
-				</math>
-				) attention scores for each token.
-			</p>
-		 This is followed by a multi-layer perceptron (MLP). Throughout the rest of 
-			this discussion, a ConvAttention layer refers to one attention layer with its pooling layer and MLP. <br></br>
-
-			It is noted that the pooling layer itself enforces locality. However, this architecture still fundamentally differs from a CNN 
-			in that it dynamically determines the importance of interactions within the kernel rather than applying fixed, learned filters in CNNs.
-			This enables the ConvAttention layer to adapt focus based on the input patches. <br></br>
-
-			Need to mention when ConvAttention is used, position embeding is not necessary, as the attention masking already capture the positional information.
+					<mn>2</mn>
+				</msup>
+			</math>
+			tokens within each convolution kernel into a single token. This pooling layer is implemented as a linear layer. This is followed by a multi-layer perceptron (MLP). 
+			Throughout the rest of 
+			this discussion, a ConvAttention layer refers to one attention layer with its pooling layer and MLP.
+		 	This is followed by a multi-layer perceptron (MLP). The architecture is visualized bellow. <br></br>
 
 			<img src="./images/model.png" width="500px">
 
+			Although the goal of ConvAttention is to mimic the behaviour of convolution layers, this architecture still fundamentally differs from CNNs
+			in that it dynamically determines the importance of interactions within the kernel rather than applying fixed, learned filters in CNNs.
+			This enables the ConvAttention layer to adapt focus based on the input patches and potentialy generalize globaly to the whole picture. Additionally, 
+			because our architecture learn localized characteristics via convolution-like attention restrictions, positional embedding may become unnecessary. <br></br>
+
 			In order to harness the strengths of both ViTs (in global context understanding) and CNNs (in local patterns), Convbrid
-			starts training with a small kernel size, and then the mask is removed after some epochs (which can also be set) so that 
-			it functions like a transformer.<br></br>
+			starts training with a small kernel size, and then the attention masks are removed after some epochs (which can also be set) so that 
+			it functions like a transformer. We also investigate a more dynamics stratergy of transitioning via a slow relax of the kernel size and pooling characteristics.<br></br>
 
 	
 		</div>
