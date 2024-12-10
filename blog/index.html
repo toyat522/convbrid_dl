@@ -344,9 +344,12 @@
             global relationships. By being active throughout the training process, the MLP may inhibit the ViT's ability
             to exploit its full potential for modeling long-range dependencies.<br><br>
 
-            Another approach is to use a small CNN in as a regularizer to guide the local feature learning of ViTs <a href="#ref_9">[9]</a>.
-            In addition to the transformer layers, a small pre-trained CNN runs parallel with the downsampled image, and after each layer,
-            the architecture minimizes the L2 loss between the CNN output and the transformer output.
+            Another approach involves using a small CNN as a regularizer to guide the local feature learning of Vision Transformers
+            (ViTs) <a href="#ref_9">[9]</a>. In this method, a lightweight, pre-trained CNN operates in parallel with the downsampled
+            image alongside the transformer layers. After each transformer layer, the architecture minimizes the L2 loss between the
+            output of the CNN and that of the transformer. This process distills locality knowledge from the CNN into the ViT’s hidden
+            layers during training, with the CNN outputs being discarded during inference. Consistent with previous studies, results
+            show that on small datasets such as CIFAR-100, this approach leads to up to a 13% improvement over the baseline transformer model.
 
             Lastly, a notable advancement in tackling this challenge is the T2T-ViT (Tokens-to-Token Vision Transformer) architecture,
             which combines multi-layer perceptrons (MLPs) for progressive tokenization of image structures with an efficient CNN-inspired
@@ -538,11 +541,6 @@
 			CIFAR-100, this corresponds to epochs _ and _ respectively.<br></br>
 
 			INSERT FIGURE  <br></br>
-
-
-
-
-
 
 			</div>
 		<div class="margin-right-block">
