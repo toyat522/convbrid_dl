@@ -530,16 +530,19 @@
 			<h1>Evaluating the CNN and Transformer</h1>
 			The CNN was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
 			how long it takes for the training accuracy to plateau, which is determined by when 5 epochs do not change
-			training accuracy by 1%. As expected in INSERT FIGURE, the CNN outperforms the transformer. <br></br>
+			training accuracy by 1%. 
 
-			Need to explain that the figure shows the upper bound of the validating accuracy. <br></br>
+			<img src="./images/training_stats.png" width=512px/>
+			The above figure demonstrates the performances of the various models on CIFAR-10 and CIFAR-100. The 
+			accuracies shown in the figure are the best validation accuracy up to that point. As expected, the CNN outperforms the
+			transformer.
 			
 			<h1>ConvAttention</h1>
 			The attention masks were visualized INSERT IMAGES and it was found that it resembles a convolutional layer in enforcing locality.
 			Higher attention appears to be given to tokens near edges or areas with abrupt color transitions. This suggests that
 			the attention mechanism is inherently able to detect significant local features, just as in a CNN. <br></br>
 
-			SHOULD WE ALSO VISUALIZE THE CNN Kernel<br></br>
+			<img src="./images/conv_attention_visualization_cifar10.png" width=512px/>
 
 			<h1>ConvBrid</h1>
 			Discussing the attention visualization of the ConvBrid model <br></br>
@@ -550,10 +553,8 @@
 			Discuss that the restricting mechanism is satisfy with the pooling alone and the attention masking is not necessary. This is still an interesting result. However, it create a diffuculty in transitioning between ConvAttention and traditional transfomer. <br></br>
 
 			During the training of the ConvBrid model, the transition from ConvAttention (with kernel size = 5) to a transformer (without masking) 
-			is triggered when the ConvAttention module reaches saturation, indicated by the training accuracy plateauing. For CIFAR-10 and 
-			CIFAR-100, this corresponds to epochs _ and _ respectively.<br></br>
-
-			INSERT FIGURE  <br></br>
+			is triggered when the ConvAttention module reaches saturation, indicated by the training accuracy nearly plateauing. For CIFAR-10 and 
+			CIFAR-100, this corresponds to epochs 15 and 80 respectively, as represented in the figure above.<br></br>
 
 			</div>
 		<div class="margin-right-block">
@@ -595,8 +596,6 @@
 			
 			As of now, the model set at kernel = 5 is only able to reach 52% accuracy. This probably points to further debugging that has to be
 			done. Theoretically, it should be able to perform comparably to the initial ConvBrid model, if not better. <br></br>
-
-
 			
 		</div>
 		<div class="margin-right-block">
