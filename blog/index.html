@@ -498,6 +498,13 @@
 
 			Each model is run until saturation, using the AdamW optimizer and Cosine Annealing scheduler. <br></br>
 
+			<h1>ConvAttention v.s. CNN</h1>
+			To verify the functionality of the ConvAttention layer, models created using ConvAttention and CNN layers with the same complexity (explain what same complexity mean) ar compared. <br></br>
+
+			We except similar behaviour and validation accuracy. Although ConvAttention take more time to train. <br></br>
+
+			Discuss the attention visualization of the ConvAttention model <br></br>
+
 			<h1>Convbrid Transformer</h1>
 			A Convbrid transformer was then created with the exact convolution characteristics of the CNN (similar
             layers and kernel sizes) and compare its performance on the CIFAR-10 and CIFAR-100 datasets with the two aforementioned models. 
@@ -519,7 +526,9 @@
 			<h1>Evaluating the CNN and Transformer</h1>
 			The CNN was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
 			how long it takes for the training accuracy to plateau, which is determined by INSERT GOOD METRIC FOR WHEN ITS 
-			SATURATED. As expected in INSERT FIGURE, the CNN outperforms the transformer.
+			SATURATED. As expected in INSERT FIGURE, the CNN outperforms the transformer. <br></br>
+
+			Need to explain that the figure shows the upper bound of the validating accuracy. <br></br>
 			
 			<h1>ConvAttention</h1>
 			The attention masks were visualized INSERT IMAGES and it was found that it resembles a convolutional layer in enforcing locality.
