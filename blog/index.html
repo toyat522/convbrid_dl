@@ -645,9 +645,30 @@
 		</div>
 		<div class="main-content-block">
 			<h2>Conclusion</h2>
-            After this initial step, the aim is to explore different ways of manipulating the ConvBrid kernel sizes, and 
-			analyse how they affect performance, expanding to larger datasets such as ImageNet-1K <a href="#ref_10">[10]</a>.
-		</div>
+            This study validates the limitations of traditional Vision Transformers (ViTs) on small-scale datasets and
+            introduces the ConvBrid Transformer, a hybrid architecture designed to address these challenges by incorporating
+            CNN-like locality inductive biases. By leveraging attention masking in the early stages of training and
+            transitioning to global attention in later epochs, ConvBrid seeks to balance efficient learning of local
+            features with the global context capabilities of ViTs. <br><br>
+
+            The experiments confirmed that CNNs outperform ViTs on small datasets like CIFAR-10 and CIFAR-100 due to their
+            ability to capture local patterns effectively. The ConvAttention block demonstrated promising results by
+            mimicking CNN behavior, providing evidence that locality-guided attention can enhance ViT performance on
+            small datasets. However, the ConvBrid model’s transition mechanism from ConvAttention to a full transformer
+            revealed challenges, with the model failing to outperform ConvAttention alone. This was attributed to the
+            pooling layer's inherent ability to capture local features, which limited the impact of transitioning to global
+            attention. <br><br>
+
+            Further exploration into dynamic kernel sizes for ConvBrid highlighted potential avenues for improvement, such
+            as hierarchical learning strategies to progressively broaden contextual understanding. However, these approaches
+            require further refinement, as initial attempts achieved suboptimal accuracy, emphasizing the need for additional
+            debugging and optimization. <br><br>
+
+            Moving forward, future work will focus on fine-tuning kernel size manipulation strategies, evaluating their impact
+            on performance, and scaling experiments to larger datasets like ImageNet-1K. This progression aims to solidify
+            ConvBrid's potential as a robust solution for adapting ViTs to domains with limited data, bridging the gap between
+            CNN and transformer paradigms. <br><br>
+        </div>
 		<div class="margin-right-block">
 		</div>
 	</div>
