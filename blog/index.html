@@ -318,11 +318,12 @@
             large-scale datasets, such as medical imaging <a href="#ref_7">[7]</a>.<br></br>
 
             In this project, the tendency of ViTs to overfit and struggle with learning local information was validated
-            on small-scale datasets, using CIFAR-10 and CIFAR-100. Then, to address this issue, the ConvBrid
-            Transformer was developed. This is a custom hybrid CNN-ViT architecture that incorporates
+            on small-scale datasets, using CIFAR-10 and CIFAR-100. To address this issue, we develop the ConvBrid
+            Transformer. This is a custom hybrid CNN-ViT architecture that incorporates
             locality inductive biases. During the initial stages of training, ConvBrid uses attention masks to limit attention
             to local patches, mimicking the locality behavior of CNNs. This constraint encourages the model to learn spatial locality
-            early on during training without the need of large datasets for the model to learn inductive biases.
+            early on during training without the need of large datasets for the model to learn inductive biases. As training progresses,
+			the attention masks are removed, allowing the model to learn global relationships. 
             By combining the spatial awareness of convolutional layers with the global attention capabilities of
             transformers, this design facilitates more efficient training on smaller datasets.<br><br>
 		</div>
@@ -405,7 +406,7 @@
 				<mo>&#xD7;</mo>
 				<mi>k</mi>
 			</math>
-			neighborhood including padding tokens. After the masked self-attention and an addiitonal residual layer, a pooling layer combines the 
+			neighborhood including padding tokens. After the masked self-attention and an additonal residual layer, a pooling layer combines the 
 			<math xmlns="http://www.w3.org/1998/Math/MathML">
 				<msup>
 					<mi>k</mi>
@@ -457,7 +458,7 @@
             a residual layer, a max pooling layer, and a final MLP. The kernel size of the convolution layer is set to
             match that of the ConvAttention block. However, the stride and padding are selected such that the dimensions
             (or the number of tokens) are conserved. The actual stride and padding in the ConvAttention block are implemented
-            through the max pooling layer. <br><br>
+            through the max pooling layer. The architecture is visualized above. <br><br>
 
             The benchmark models are designed to allow the creation of equivalent architectures using ConvAttention or CNN blocks. The
             networks consist of an initial embedding layer, implemented using Torch's built-in Conv2d layer with a kernel
@@ -553,11 +554,13 @@
 
 			<img src="./images/training_stats.png" width=900px/>
 
-            The figure above illustrates the performance of various models on CIFAR-10 and CIFAR-100, showing the best
-            validation accuracy achieved up to each point. From the curve, we confirm the findings of previous studies that
-            CNNs outperform transformers, achieving up to 88% accuracy compared to the transformer’s 80%. Furthermore, our model
-            using ConvAttention layers closely aligns with the CNN results, particularly for the larger CIFAR-100 model. This
-            provides evidence that ConvAttention is functioning as expected, effectively mimicking CNN behavior. However, it was
+            The figure above illustrates the performance of various models on CIFAR-10 and CIFAR-100, showing the upper bounds of the 
+            validation accuracies. This upper bound visualization is needed as the Cosine Annealing scheduler induces fluctuations
+			in the losses and accuracies, which although does not affect the performances of the models, have prooved to be distracting. 
+			From the curve, we confirm the findings of previous studies that CNNs outperform transformers, achieving up to 
+			86% accuracy compared to the transformer’s 80%. Furthermore, our model using ConvAttention layers closely 
+			aligns with the CNN results, particularly for the larger CIFAR-100 model. This provides evidence 
+			that ConvAttention is functioning as expected, effectively mimicking CNN behavior. However, it was
             surprising that the ConvBrid model did not perform better than ConvAttention, which we will discuss further in the ConvBrid
             results section.<br><br>
 
