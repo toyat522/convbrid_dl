@@ -381,7 +381,9 @@
 			The Convbrid transformer aims to emulate the behavior of extracting data from an image patch by performing convolution
             of a given kernel size as in a traditional CNNs. To this end, we developed the ConvAttention block, which is a modified
 			attention mechanism operating in a localized manner, resembling the small
-			receptive field in a convolutional kernel. The ConvAttention block achieves this by masking the attention scores of tokens, 
+			receptive field in a convolutional kernel.  <br></br>
+			
+			The ConvAttention block achieves this by masking the attention scores of tokens, 
 			such that each token can only attend to its local "neighborhood". Here, each token represents a pixels in the image.
             In a similar manner to a convolutional layer, a kernel size can be chosen. This defines the size of the "neighborhood". 
 			If 
@@ -468,11 +470,16 @@
 			We aim to quantify the level of improvement with CNN over transformers in the context of these 
 			small datasets, and confirm that the CNN will outperform the transformer. <br></br>
 
+			In order to have meaningful comparisons, we develop a convolution block with the same complexity and structure as the ConvAttention block. This convolution block composes of a convolution 
+			layer combined with a MLP, following by a residual layer, a max pooling layer, and a final MLP. The kernel size of the convolution layer is set to be the same as in the ConvAttention block.
+			The stride and padding, however, are choosen such that the dimention (or the number of tokens) is conserved. The actual stride and padding of the ConvAttention block are implemented via the
+			max pooling layer. <br></br>
+
 			The bench marking CNN is designed to allow the creation of equivalent architectures using ConvAttention layers. 
-			The networks are composed of an initial embedding layer, implemented using Torch's built-in
-			Conv2D layers with the kernel size of 3 and the stride and padding of 1. This directly map 1024 pixels to 1024 initial tokens. The embedding size of the token is chosen to be 64
-			and this is kept throughout the layers (as number of input and output channels to the convolutional layers). The tokens are then passed through 6 convolution blocks as described bellow. For the CNN we built the convolution blocks with two simple convolution layers
-			with MLP layers in between and afterwards. This is to make traditional convolution block perform and have the same complexity as the ConvAttention block. <br></br>
+			The networks are composed of an initial embedding layer, implemented using a convolution layer with the kernel size of 3 and the stride and padding of 1. 
+			This directly map 1024 pixels to 1024 initial tokens. The embedding size of the token is chosen to be 64
+			and this is kept throughout the layers (as number of input and output channels to the convolutional layers). The tokens are then passed through 6 convolution blocks as described bellow, followed by a 
+			MLP. <br></br>
 			
 			<table>
 				<thead>
@@ -529,10 +536,8 @@
 					</tr>
 				</tbody>
 			</table>
-			
-			For the transformer, TO TRAIN ACTUAL TRANSFORMER WITHOUT LOCALITY <br><br>
 
-			Each model is run until saturation, using the AdamW optimizer and Cosine Annealing scheduler. <br><br>
+			Each model is run until saturation of validating accuracy, using the AdamW optimizer and Cosine Annealing scheduler. <br><br>
 
 			<h1>ConvAttention v.s. CNN</h1>
 			To verify the functionality of the ConvAttention layer, models created using ConvAttention and CNN layers with
