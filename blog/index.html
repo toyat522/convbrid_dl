@@ -463,7 +463,7 @@
             size is set to 64 and remains consistent throughout the layers (as the number of input and output channels for
             the convolutional layers). The tokens are then passed through 6 convolutional blocks as described below. <br><br>
 			
-            <table style="border-collapse: collapse; width: 100%;">
+            <table style="border-collapse: collapse; width: 40%;">
                 <thead>
                     <tr>
                         <th style="padding: 10px; border: 1px solid black; text-align: center;">Layer</th>
@@ -524,16 +524,13 @@
             training accuracy by 1%. <br><br>
 
 			<h1>ConvAttention v.s. CNN</h1>
-			To verify the functionality of the ConvAttention layer, models created using ConvAttention and CNN layers with
-            the same complexity (explain what same complexity mean) ar compared. <br><br>
-
-			We except similar behaviour and validation accuracy. Although ConvAttention take more time to train. <br><br>
-
-			Discuss the attention visualization of the ConvAttention model <br><br>
+			To verify the functionality of the ConvAttention block, we compare two benchmark models, one created using the CNN block, and the other created using the ConvAttention. We expect
+			similar behaviors and performance between the two. We further confirm the result by visualizing the attention probability of the first attention layer in the ConvAttention model 
+			and inspecting where the model is "focusing" the most on in the validating images. <br><br>
 
 			<h1>ConvBrid Transformer</h1>
-			A ConvBrid transformer was then created with the exact convolution characteristics of the CNN (similar
-            layers and kernel sizes) and compare its performance on the CIFAR-10 and CIFAR-100 datasets with the two aforementioned models. 
+			A ConvBrid transformer is then created with the exact convolution characteristics of the CNN (similar
+            layers and kernel sizes) and compare its performance on the CIFAR-10 and CIFAR-100 datasets of the three aforementioned models. 
 			The ConvBrid model is expected to perform similarly if not better than the CNN.<br><br>
 
             After this initial step, the aim is to explore different ways of manipulating the ConvBrid kernel sizes, and 
