@@ -450,12 +450,12 @@
             images, respectively. The aim is to quantify the improvement level with CNNs over transformers in
             the context of small datasets and confirm that the CNN will outperform the transformer. <br><br>
 
-			In order to have meaningful comparisons, we develop a convolution block with the same complexity and structure 
-			as the ConvAttention block. This convolution block composes of a convolution layer combined with a MLP, following 
-			by a residual layer, a max pooling layer, and a final MLP. The kernel size of the convolution layer is set to be 
-			the same as in the ConvAttention block. The stride and padding, however, are choosen such that the dimention 
-			(or the number of tokens) is conserved. The actual stride and padding of the ConvAttention block are implemented via the
-			max pooling layer. <br></br>
+            To enable meaningful comparisons, we develop a convolution block with the same complexity and structure as
+            the ConvAttention block. This convolution block consists of a convolution layer combined with an MLP, followed by
+            a residual layer, a max pooling layer, and a final MLP. The kernel size of the convolution layer is set to
+            match that of the ConvAttention block. However, the stride and padding are selected such that the dimensions
+            (or the number of tokens) are conserved. The actual stride and padding in the ConvAttention block are implemented
+            through the max pooling layer. <br><br>
 
             The benchmark models are designed to allow the creation of equivalent architectures using ConvAttention or CNN blocks. The
             networks consist of an initial embedding layer, implemented using Torch's built-in Conv2d layer with a kernel
@@ -518,10 +518,13 @@
                     </tr>
                 </tbody>
             </table><br><br>
-			Each model is run until saturation of validating accuracy, using the AdamW optimizer and Cosine Annealing scheduler. <br><br>
+			Each model is run until saturation of validating accuracy, using the AdamW optimizer and Cosine Annealing scheduler.
+			Each model was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
+			how long it takes for the training accuracy to plateau, which is determined by when 2 epochs do not change
+            training accuracy by 1%. <br><br>
 
 			<h1>ConvAttention v.s. CNN</h1>
-			To verify the functionality of the ConvAttention layer, benchmark models created using ConvAttention and CNN layers with
+			To verify the functionality of the ConvAttention layer, models created using ConvAttention and CNN layers with
             the same complexity (explain what same complexity mean) ar compared. <br><br>
 
 			We except similar behaviour and validation accuracy. Although ConvAttention take more time to train. <br><br>
@@ -547,10 +550,6 @@
 			<h2>Results</h2>
 
 			<h1>Evaluating the CNN and Transformer</h1>
-            TODO MOVE THIS TO EXPERIMENTS
-			Each model was trained on CIFAR-10 for 40 epochs and CIFAR-100 for 150 epochs. The number of epochs was determined by
-			how long it takes for the training accuracy to plateau, which is determined by when 2 epochs do not change
-			training accuracy by 1%. 
 
 			<img src="./images/training_stats.png" width=900px/>
 
