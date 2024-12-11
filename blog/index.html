@@ -353,7 +353,7 @@
             <br><br>
 
             Lastly, a notable advancement in tackling this challenge is the T2T-ViT (Tokens-to-Token Vision Transformer) architecture,
-            which combines multi-layer perceptrons (MLPs) for progressive tokenization of image structures with an efficient CNN-inspired
+            which combines MLPs for progressive tokenization of image structures with an efficient CNN-inspired
             deep-narrow backbone to model global attention relations on tokens <a href="#ref_7">[7]</a>. This dual approach enables the T2T-ViT
             to effectively capture local image details while simultaneously leveraging global context through attention mechanisms.
             By combining these capabilities, the T2T-ViT demonstrates superior or comparable performance to CNNs of similar complexity,
@@ -378,64 +378,58 @@
 		<div class="main-content-block">
 			<h2>ConvBrid Architecture</h2>
 			
-			The ConvBrid transformer aims to emulate the behavior of extracting data from an image patch by performing convolution
-            of a given kernel size as in a traditional CNNs. To this end, we developed the ConvAttention block, which is a modified
-			attention mechanism operating in a localized manner, resembling the small
-			receptive field in a convolutional kernel.  <br></br>
-			
-			The ConvAttention block achieves this by masking the attention scores of tokens, 
-			such that each token can only attend to its local "neighborhood". Here, each token represents a pixels in the image.
-            In a similar manner to a convolutional layer, a kernel size can be chosen. This defines the size of the "neighborhood". 
-			If 
+            The ConvBrid transformer is designed to emulate the behavior of traditional CNNs by extracting data from an
+            image patch through convolution with a given kernel size. To achieve this, we developed the ConvAttention block,
+            which is a modified attention mechanism that operates in a localized manner, similar to the small receptive field
+            of a convolutional kernel. The ConvAttention block enforces this locality by masking the attention scores of tokens,
+            ensuring that each token can only attend to its local "neighborhood," with each token representing a pixel
+            in the image.<br><br>
+
+            Just as in a convolutional layer, the kernel size and stride can be selected, determining the size of the "neighborhood"
+            each token attends to. If 
 			<math xmlns="http://www.w3.org/1998/Math/MathML">
 				<mi>k</mi>
 			</math>
-			is the kernel size, then each token 
+			is the kernel size, each token 
 			<math xmlns="http://www.w3.org/1998/Math/MathML">
 				<mi>t</mi>
 			</math>
-			interacts with the nearby tokens 
+			interacts with nearby tokens 
 			<math xmlns="http://www.w3.org/1998/Math/MathML">
 				<mi>N</mi><mo>(</mo><mi>t</mi><mo>)</mo>
-			</math>, which are the tokens corresponding to the patches in its 
+			</math>, which correspond to the patches in its 
 			<math xmlns="http://www.w3.org/1998/Math/MathML">
 				<mi>k</mi>
 				<mo>&#xD7;</mo>
 				<mi>k</mi>
 			</math>
-			neighborhood (including padding tokens). The stride can be similarly defined, where for only a subset of tokens 
-			<math xmlns="http://www.w3.org/1998/Math/MathML">
-				<mi>t</mi>
-			</math>
-			is 
-			<math xmlns="http://www.w3.org/1998/Math/MathML">
-				<mi>N</mi><mo>(</mo><mi>t</mi><mo>)</mo>
-			</math>
-			considered. This subset corresponds to the centers of the kernels in the 
-			corresponding convolutional layer with the same stride. After the masked self-attention (and an addiitonal residual layer), a pooling layer combines the 
+			neighborhood including padding tokens. After the masked self-attention and an addiitonal residual layer, a pooling layer combines the 
 			<math xmlns="http://www.w3.org/1998/Math/MathML">
 				<msup>
 					<mi>k</mi>
 					<mn>2</mn>
 				</msup>
 			</math>
-			tokens within each convolution kernel into a single token. This pooling layer is implemented as a linear layer. This is followed by a multi-layer perceptron (MLP). 
-			Throughout the rest of 
-			this discussion, a ConvAttention layer refers to one attention layer with its pooling layer and MLP.
-		 	This is followed by a multi-layer perceptron (MLP). The architecture is visualized bellow. <br></br>
+			tokens within each convolution kernel into a single token. This pooling is implemented as a linear layer,
+            followed by an MLP. Throughout the rest of this discussion, a ConvAttention layer refers to one attention
+            layer, including the pooling layer and MLP. The architecture is visualized below. <br><br>
 
 			<img src="./images/model.png" width="450px">
 
-			Although the goal of ConvAttention is to mimic the behaviour of convolution layers, this architecture still fundamentally differs from CNNs
-			in that it dynamically determines the importance of interactions within the kernel rather than applying fixed, learned filters in CNNs.
-			This enables the ConvAttention layer to adapt focus based on the input patches and potentialy generalize globaly to the whole picture. Additionally, 
-			because our architecture learn localized characteristics via convolution-like attention restrictions, positional embedding may become unnecessary. <br></br>
+            Although the goal of ConvAttention is to mimic the behavior of convolutional layers, this architecture
+            fundamentally differs from CNNs in that it dynamically determines the importance of interactions within
+            the kernel, rather than applying fixed, learned filters as in CNNs. This flexibility allows the
+            ConvAttention layer to adapt its focus based on the input patches and potentially generalize globally
+            across the entire image. Additionally, since the architecture learns localized characteristics through
+            convolution-like attention restrictions, positional embeddings may become unnecessary. <br><br>
 
-			In order to harness the strengths of both ViTs (in global context understanding) and CNNs (in local patterns), ConvBrid
-			starts training with a small kernel size, and then the attention masks are removed after some epochs (which can also be set) so that 
-			it functions like a transformer. We also investigate a more dynamics stratergy of transitioning via a slow relax of the kernel size and pooling characteristics.<br></br>
+            To leverage the strengths of both Vision Transformers (ViTs), in global context understanding, and CNNs,
+            in capturing local patterns, ConvBrid starts training with a small kernel size. After several epochs
+            (which can be configured), the attention masks are removed, allowing the model to function
+            like a transformer. We also explore a more dynamic strategy of transitioning through a gradual
+            relaxation of the kernel size and pooling characteristics, which could offer smoother adaptation to
+            global contexts.
 
-	
 		</div>
 		<div class="margin-right-block">
 		</div>
@@ -446,96 +440,81 @@
 		</div>
 		<div class="main-content-block">
 			<h2>Experiments</h2>
-			<h1>Verifying CNN and Transformer</h1>
-            A series of experiments is first performed to validate the findings of previous papers that ViTs struggle to
-            find meaningful relations between image patches close to each other and tend to overfit to the test data.<br><br>
-
-            <!--
-			- Repeat the test in CIFAR 10 and CIFAR 100.
-            - Describe our models and have visuals
-            - Expected behavior
-            - Learn locality -> learn attention better because we are focusing our attention on limited places
-            - CIFAR10 and CIFAR100
-            - Mechanism of releasing the masking
-            - Discuss our results (why the frick did nothing change)
-            - Train a bit faster
-            - Not able to repeat the test of tiny transformer paper because
-            a lot of resources are needed to repeat the results of the paper
-            - How we do the masking. Reflecting the behavior of CNN to convert transformer to CNN.
-			-->
+			<h1>Verifying the CNN and Transformer</h1>
+            Initially, a series of experiments were conducted to validate the findings of previous papers that ViTs struggle to
+            find meaningful relationships between image patches that are close to each other and tend to overfit to the test data.<br><br>
 			
-            The test in <a href="#ref_9">[9]</a> is repeated, comparing the performances of a <!--T2T-ViT-14--> transformer
-            <a href="#ref_7">[7]</a> to that of a CNN with the same complexity using the CIFAR-10 and CIFAR-100 datasets 
-			(These are small datasets, with training and test datasets containing 50000 and 10000 images respectively). 
-			We aim to quantify the level of improvement with CNN over transformers in the context of these 
-			small datasets, and confirm that the CNN will outperform the transformer. <br></br>
+            The test in <a href="#ref_9">[9]</a> is repeated by comparing the performance of a transformer
+            <a href="#ref_7">[7]</a> to that of a CNN with equivalent complexity using the CIFAR-10 and CIFAR-100
+            datasets. These are small datasets, with both the training and test sets containing 50,000 and 10,000
+            images, respectively. The aim is to quantify the improvement level with CNNs over transformers in
+            the context of small datasets and confirm that the CNN will outperform the transformer. <br><br>
 
-			In order to have meaningful comparisons, we develop a convolution block with the same complexity and structure as the ConvAttention block. This convolution block composes of a convolution 
-			layer combined with a MLP, following by a residual layer, a max pooling layer, and a final MLP. The kernel size of the convolution layer is set to be the same as in the ConvAttention block.
-			The stride and padding, however, are choosen such that the dimention (or the number of tokens) is conserved. The actual stride and padding of the ConvAttention block are implemented via the
-			max pooling layer. <br></br>
-
-			The bench marking CNN is designed to allow the creation of equivalent architectures using ConvAttention layers. 
-			The networks are composed of an initial embedding layer, implemented using a convolution layer with the kernel size of 3 and the stride and padding of 1. 
-			This directly map 1024 pixels to 1024 initial tokens. The embedding size of the token is chosen to be 64
-			and this is kept throughout the layers (as number of input and output channels to the convolutional layers). The tokens are then passed through 6 convolution blocks as described bellow, followed by a 
-			MLP. <br></br>
+            The benchmark CNN is designed to allow the creation of equivalent architectures using ConvAttentionlayers. The
+            networks consist of an initial embedding layer, implemented using Torch's built-in Conv2D layers with a kernel
+            size of 3, stride, and padding of 1. This directly maps 1024 pixels to 1024 initial tokens. The token embedding
+            size is set to 64 and remains consistent throughout the layers (as the number of input and output channels for
+            the convolutional layers). The tokens are then passed through 6 convolutional blocks as described below. For the
+            CNN, we built the convolution blocks with two simple convolutional layers, with MLP layers in between and afterward.
+            This ensures that the traditional convolutional block performs with the same complexity as the ConvAttention block. <br><br>
 			
-			<table>
-				<thead>
-					<tr>
-						<th>Layer</th>
-						<th>Kernel Size</th>
-						<th>Stride</th>
-						<th>Padding</th>
-						<th>Output Size</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>5</td>
-						<td>2</td>
-						<td>2</td>
-						<td>16 × 16</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>5</td>
-						<td>2</td>
-						<td>2</td>
-						<td>8 × 8</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>5</td>
-						<td>1</td>
-						<td>2</td>
-						<td>8 × 8</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>5</td>
-						<td>1</td>
-						<td>2</td>
-						<td>8 × 8</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>5</td>
-						<td>2</td>
-						<td>2</td>
-						<td>4 × 4</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td>5</td>
-						<td>2</td>
-						<td>2</td>
-						<td>2 × 2</td>
-					</tr>
-				</tbody>
-			</table>
+            <table style="border-collapse: collapse; width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="padding: 10px; border: 1px solid black; text-align: center;">Layer</th>
+                        <th style="padding: 10px; border: 1px solid black; text-align: center;">Kernel Size</th>
+                        <th style="padding: 10px; border: 1px solid black; text-align: center;">Stride</th>
+                        <th style="padding: 10px; border: 1px solid black; text-align: center;">Padding</th>
+                        <th style="padding: 10px; border: 1px solid black; text-align: center;">Output Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">1</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">5</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">16 × 16</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">5</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">8 × 8</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">3</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">5</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">1</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">8 × 8</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">4</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">5</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">1</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">8 × 8</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">5</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">5</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">4 × 4</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">6</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">5</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2</td>
+                        <td style="padding: 10px; border: 1px solid black; text-align: center;">2 × 2</td>
+                    </tr>
+                </tbody>
+            </table><br><br>
+			
+			For the transformer, TO TRAIN ACTUAL TRANSFORMER WITHOUT LOCALITY <br><br>
 
 			Each model is run until saturation of validating accuracy, using the AdamW optimizer and Cosine Annealing scheduler. <br><br>
 
@@ -591,21 +570,22 @@
             capture fundamental local features, which they struggle to extract when trained on smaller datasets.<br><br>
 			
 			<h1>ConvAttention</h1>
+			<img src="./images/conv_attention_visualization_cifar10.png" width=850px/>
+
             In addition to comparing the validation loss and accuracy curves, we visualized the average attention map for the
-            first ConvAttention layer to confirm its behavior. As seen below, the attention map closely resembles the behavior
+            first ConvAttention layer to confirm its behavior. As seen above, the attention map closely resembles the behavior
             of a convolutional layer, effectively enforcing locality, which demonstrates that the attention masking is functioning
             as intended. Higher attention is given to tokens near edges or regions with abrupt color transitions. This suggests that
             the attention mechanism is naturally adept at detecting fine-grained local features, such as corners and edges, similar
             to a CNN. This behavior highlights the model’s ability to capture local patterns early in the training process.<br><br>
 
-			<img src="./images/conv_attention_visualization_cifar10.png" width=850px/>
-
 			<h1>ConvBrid</h1>
-            Below are the attention maps for our ConvBrid model:<br><br>
-			
 			<img src="./images/convbrid_attn_.png" width=850px/>
 
-			It was found that the switching mechanism does not work as intended. Discuss the TradAttention model, explaining that is the ConvAttention without attention masking (but with pooling). This model behavae exactly like the ConvAttention.
+            From the attention maps for our ConvBrid model, we found that the switching mechanism from CNN to a transformer was not working as
+            intended. 
+
+            Discuss the TradAttention model, explaining that is the ConvAttention without attention masking (but with pooling). This model behavae exactly like the ConvAttention.
 			Discuss that the restricting mechanism is satisfy with the pooling alone and the attention masking is not necessary. This is still an interesting result. However, it create a diffuculty in transitioning between ConvAttention and traditional transfomer. <br></br>
 
 			During the training of the ConvBrid model, the transition from ConvAttention (with kernel size = 5) to a transformer (without masking) 
