@@ -445,7 +445,7 @@
             find meaningful relationships between image patches that are close to each other and tend to overfit to the test data.<br><br>
 			
             The test in <a href="#ref_9">[9]</a> is repeated by comparing the performance of a transformer
-            <a href="#ref_7">[7]</a> to that of a CNN with equivalent complexity using the CIFAR-10 and CIFAR-100
+            <a href="#ref_7">[7]</a> to that of a benchmark CNN (described bellow) with equivalent complexity using the CIFAR-10 and CIFAR-100
             datasets. These are small datasets, with both the training and test sets containing 50,000 and 10,000
             images, respectively. The aim is to quantify the improvement level with CNNs over transformers in
             the context of small datasets and confirm that the CNN will outperform the transformer. <br><br>
@@ -457,13 +457,11 @@
 			(or the number of tokens) is conserved. The actual stride and padding of the ConvAttention block are implemented via the
 			max pooling layer. <br></br>
 
-            The benchmark CNN is designed to allow the creation of equivalent architectures using ConvAttentionlayers. The
-            networks consist of an initial embedding layer, implemented using Torch's built-in Conv2D layers with a kernel
+            The benchmark models are designed to allow the creation of equivalent architectures using ConvAttention or CNN blocks. The
+            networks consist of an initial embedding layer, implemented using Torch's built-in Conv2d layer with a kernel
             size of 3, stride, and padding of 1. This directly maps 1024 pixels to 1024 initial tokens. The token embedding
             size is set to 64 and remains consistent throughout the layers (as the number of input and output channels for
-            the convolutional layers). The tokens are then passed through 6 convolutional blocks as described below. For the
-            CNN, we built the convolution blocks with two simple convolutional layers, with MLP layers in between and afterward.
-            This ensures that the traditional convolutional block performs with the same complexity as the ConvAttention block. <br><br>
+            the convolutional layers). The tokens are then passed through 6 convolutional blocks as described below. <br><br>
 			
             <table style="border-collapse: collapse; width: 100%;">
                 <thead>
@@ -523,7 +521,7 @@
 			Each model is run until saturation of validating accuracy, using the AdamW optimizer and Cosine Annealing scheduler. <br><br>
 
 			<h1>ConvAttention v.s. CNN</h1>
-			To verify the functionality of the ConvAttention layer, models created using ConvAttention and CNN layers with
+			To verify the functionality of the ConvAttention layer, benchmark models created using ConvAttention and CNN layers with
             the same complexity (explain what same complexity mean) ar compared. <br><br>
 
 			We except similar behaviour and validation accuracy. Although ConvAttention take more time to train. <br><br>
