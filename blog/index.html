@@ -349,8 +349,8 @@
             image alongside the transformer layers. After each transformer layer, the architecture minimizes the L2 loss between the
             output of the CNN and that of the transformer. This process distills locality knowledge from the CNN into the ViT’s hidden
             layers during training, with the CNN outputs being discarded during inference. Consistent with previous studies, results
-            show that on small datasets such as CIFAR-100, this approach leads to up to a 13% improvement over the baseline transformer model.
-            <br><br>
+            show that on small datasets such as CIFAR-100, this approach leads to up to a 13% improvement over the baseline
+            transformer model.<br><br>
 
             Lastly, a notable advancement in tackling this challenge is the T2T-ViT (Tokens-to-Token Vision Transformer) architecture,
             which combines MLPs for progressive tokenization of image structures with an efficient CNN-inspired
@@ -362,8 +362,10 @@
 
             Compared to previous methods, our ConvBrid architecture offers a more direct imitation of CNNs by initially restricting
             attention to local patches. However, as training progresses, the attention masks are removed, allowing the model to
-            integrate global information alongside the local features learned in the earlier stages of training. We hypothesize that
-            this novel training approach will enable the transformer to learn local features more quickly than traditional ViTs,
+            integrate global information alongside the local features learned in the earlier stages of training. Similar attention
+            masking approaches have been proposed in <a href="#ref_2">[2-5]</a>. However, in these works, the primary focus is
+            on reducing computational complexity and memory requirements when training models on large datasets. We hypothesize that
+            this training approach will enable the transformer to learn local features more quickly than traditional ViTs,
             without compromising its ability to capture global dependencies, balancing between efficiently learning
             locality and maintaining the transformer's capacity for global attention. This method reflects the learning transfer approach, 
 			albeit more complicated, as it allows different architectures to learn from each other. <br><br>
@@ -665,7 +667,7 @@
             debugging and optimization. <br><br>
 
             Moving forward, future work will focus on fine-tuning kernel size manipulation strategies, evaluating their impact
-            on performance, and scaling experiments to larger datasets like ImageNet-1K. This progression aims to solidify
+            on performance, and scaling experiments to larger datasets like ImageNet-1K <a href="#ref_10">[10]</a>. This progression aims to solidify
             ConvBrid's potential as a robust solution for adapting ViTs to domains with limited data, bridging the gap between
             CNN and transformer paradigms. <br><br>
         </div>
