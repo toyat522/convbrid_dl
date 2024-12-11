@@ -308,14 +308,14 @@
             a result, ViTs require large datasets or extensive data augmentation for effective training. This also leads to
             a higher parameter count and the need for substantially larger training datasets to match the performance of CNNs.
             Notably, when trained on mid-sized datasets without regularization, ViTs perform comparably or slightly worse
-            than ResNets of similar size <a href="#ref_1">[1]</a>. When trained on CIFAR-100, ViTs tend to overfit the training set due to their difficulty in capturing local information, resulting in lower test accuracy <a href="#ref_9">[9]</a>:<br><br>
+            than ResNets of similar size <a href="#ref_1">[1]</a>. When trained on CIFAR-100, ViTs tend to overfit the training set due to their difficulty in capturing local information, resulting in lower test accuracy <a href="#ref_2">[2]</a>:<br><br>
 
             <img src="./images/vit_vs_cnn_li.jpg" width=512px/>
 
             While substantial research has focused on developing accurate models that require large datasets,
             relatively little attention has been given to training models on small datasets. This poses a
             significant challenge for developing effective ViT models in domains with limited
-            large-scale datasets, such as medical imaging <a href="#ref_7">[7]</a>.<br></br>
+            large-scale datasets, such as medical imaging <a href="#ref_3">[3]</a>.<br></br>
 
             In this project, the tendency of ViTs to overfit and struggle with learning local information was validated
             on small-scale datasets, using CIFAR-10 and CIFAR-100. To address this issue, we develop the ConvBrid
@@ -338,7 +338,7 @@
 			<h1>Background and Related Work</h1>
             Some prior work has aimed to address the lack of inductive bias in Vision Transformers (ViTs). For instance, Li
             et al. proposed adding a small multi-layer perceptron (MLP) to the architecture to penalize pairs of token embeddings
-            with large relative distances <a href="#ref_6">[6]</a>. Since the MLP functions independently of the original
+            with large relative distances <a href="#ref_4">[4]</a>. Since the MLP functions independently of the original
             architecture, it is inherently architecture-agnostic. Results show that this additional loss consistently enhances
             the accuracy of ViTs across all tested datasets, with improvements ranging from modest to significant. However,
             a notable limitation is that the MLP constrains the transformer from fully leveraging its capacity to learn
@@ -346,16 +346,16 @@
             to exploit its full potential for modeling long-range dependencies.<br><br>
 
             Another approach involves using a small CNN as a regularizer to guide the local feature learning of Vision Transformers
-            (ViTs) <a href="#ref_9">[9]</a>. In this method, a lightweight, pre-trained CNN operates in parallel with the downsampled
+            (ViTs) <a href="#ref_2">[2]</a>. In this method, a lightweight, pre-trained CNN operates in parallel with the downsampled
             image alongside the transformer layers. After each transformer layer, the architecture minimizes the L2 loss between the
             output of the CNN and that of the transformer. This process distills locality knowledge from the CNN into the ViT’s hidden
             layers during training, with the CNN outputs being discarded during inference. Consistent with previous studies, results
-            show that on small datasets such as CIFAR-100, this approach leads to up to a 13% improvement over the baseline transformer model.
-            <br><br>
+            show that on small datasets such as CIFAR-100, this approach leads to up to a 13% improvement over the baseline
+            transformer model.<br><br>
 
             Lastly, a notable advancement in tackling this challenge is the T2T-ViT (Tokens-to-Token Vision Transformer) architecture,
             which combines MLPs for progressive tokenization of image structures with an efficient CNN-inspired
-            deep-narrow backbone to model global attention relations on tokens <a href="#ref_7">[7]</a>. This dual approach enables the T2T-ViT
+            deep-narrow backbone to model global attention relations on tokens <a href="#ref_3">[3]</a>. This dual approach enables the T2T-ViT
             to effectively capture local image details while simultaneously leveraging global context through attention mechanisms.
             By combining these capabilities, the T2T-ViT demonstrates superior or comparable performance to CNNs of similar complexity,
             such as ResNets and MobileNets. This highlights the importance of incorporating locality guidance into Vision Transformers,
@@ -363,8 +363,10 @@
 
             Compared to previous methods, our ConvBrid architecture offers a more direct imitation of CNNs by initially restricting
             attention to local patches. However, as training progresses, the attention masks are removed, allowing the model to
-            integrate global information alongside the local features learned in the earlier stages of training. We hypothesize that
-            this novel training approach will enable the transformer to learn local features more quickly than traditional ViTs,
+            integrate global information alongside the local features learned in the earlier stages of training. Similar attention
+            masking approaches have been proposed in <a href="#ref_2">[5-8]</a>. However, in these works, the primary focus is
+            on reducing computational complexity and memory requirements when training models on large datasets. We hypothesize that
+            this training approach will enable the transformer to learn local features more quickly than traditional ViTs,
             without compromising its ability to capture global dependencies, balancing between efficiently learning
             locality and maintaining the transformer's capacity for global attention. This method reflects the learning transfer approach, 
 			albeit more complicated, as it allows different architectures to learn from each other. <br><br>
@@ -447,8 +449,8 @@
             Initially, a series of experiments were conducted to validate the findings of previous papers that ViTs struggle to
             find meaningful relationships between image patches that are close to each other and tend to overfit to the test data.<br><br>
 			
-            The test in <a href="#ref_9">[9]</a> is repeated by comparing the performance of a transformer
-            <a href="#ref_7">[7]</a> to that of a benchmark CNN (described bellow) with equivalent complexity using the CIFAR-10 and CIFAR-100
+            The test in <a href="#ref_2">[2]</a> is repeated by comparing the performance of a transformer
+            <a href="#ref_3">[3]</a> to that of a benchmark CNN (described bellow) with equivalent complexity using the CIFAR-10 and CIFAR-100
             datasets. These are small datasets, with both the training and test sets containing 50,000 and 10,000
             images, respectively. The aim is to quantify the improvement level with CNNs over transformers in
             the context of small datasets and confirm that the CNN will outperform the transformer. <br><br>
@@ -668,9 +670,9 @@
             debugging and optimization. <br><br>
 
             Moving forward, future work will focus on fine-tuning kernel size manipulation strategies, evaluating their impact
-            on performance, and scaling experiments to larger datasets like ImageNet-1K. This progression aims to solidify
+            on performance, and scaling experiments to larger datasets like ImageNet-1K <a href="#ref_9">[9]</a>. This progression aims to solidify
             ConvBrid's potential as a robust solution for adapting ViTs to domains with limited data, bridging the gap between
-            CNN and transformer paradigms. <br><br>
+            CNN and transformer paradigms.
         </div>
 		<div class="margin-right-block">
 		</div>
@@ -686,31 +688,28 @@
 					An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a>,
                     A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner,
                     M. Dehghani, M. Minderer, G. Heigold, S. Gelly, J. Uszkoreit, N. Houlsby, 2021<br><br>
-				<a id="ref_2"></a>[2] <a href="https://arxiv.org/abs/2006.04768">
-                    Linformer: Self-Attention with Linear Complexity</a>,
-                    S. Wang, B. Z. Li, M. Khabsa, H. Fang, H. Ma, 2020<br><br>
-				<a id="ref_3"></a>[3] <a href="https://arxiv.org/abs/1904.10509">
-                    Generating Long Sequences with Sparse Transformer</a>,
-                    R. Child, S. Gray, A. Radford, I. Sutskever, 2019<br><br>
-				<a id="ref_4"></a>[4] <a href="https://arxiv.org/abs/1911.02972">
-                    Blockwise Self-Attention for Long Document Understanding</a>,
-                    J. Qiu, H. Ma, O. Levy, S. Wen-tau Yih, S. Wang, J. Tang, 2019<br><br>
-				<a id="ref_5"></a>[5] <a href="https://arxiv.org/abs/2004.05150">
-                    Longformer: The Long-Document Transformer</a>,
-                    I. Beltagy, M. E. Peters, A. Cohan, 2020<br><br>
-				<a id="ref_6"></a>[6] <a href="https://arxiv.org/abs/2106.03746">
-                    Efficient Training of Visual Transformers with Small Datasets</a>,
-                    Y. Liu, E. Sangineto, W. Bi, N. Sebe, B. Lepri, M. De Nadai, 2021<br><br>
-				<a id="ref_7"></a>[7] <a href="https://arxiv.org/abs/2101.11986">
-                    Tokens-to-Token ViT: Training Vision Transformers from Scratch on ImageNet</a>,
-                    L. Yuan, Y. Chen, T. Wang, W. Yu, Y. Shi, Z. Jiang, F. E. Tay, J. Feng, S. Yan, 2021<br><br>
-				<a id="ref_8"></a>[8] <a href="https://arxiv.org/abs/2104.05704">
-                    Escaping the Big Data Paradigm with Compact Transformers</a>,
-                    A. Hassani, S. Walton, N. Shah, A. Abuduweili, J. Li, H. Shi, 2021<br><br>
-				<a id="ref_9"></a>[9] <a href="https://arxiv.org/abs/2207.10026">
+				<a id="ref_2"></a>[2] <a href="https://arxiv.org/abs/2207.10026">
                     Locality Guidance for Improving Vision Transformers on Tiny Datasets</a>,
                     K. Li, R. Yu, Z. Wang, L. Yuan, G. Song, J. Chen, 2022<br><br>
-			    <a id="ref_10"></a>[10] <a href="https://ieeexplore.ieee.org/document/5206848">
+				<a id="ref_3"></a>[3] <a href="https://arxiv.org/abs/2101.11986">
+                    Tokens-to-Token ViT: Training Vision Transformers from Scratch on ImageNet</a>,
+                    L. Yuan, Y. Chen, T. Wang, W. Yu, Y. Shi, Z. Jiang, F. E. Tay, J. Feng, S. Yan, 2021<br><br>
+				<a id="ref_4"></a>[4] <a href="https://arxiv.org/abs/2106.03746">
+                    Efficient Training of Visual Transformers with Small Datasets</a>,
+                    Y. Liu, E. Sangineto, W. Bi, N. Sebe, B. Lepri, M. De Nadai, 2021<br><br>
+				<a id="ref_5"></a>[5] <a href="https://arxiv.org/abs/2006.04768">
+                    Linformer: Self-Attention with Linear Complexity</a>,
+                    S. Wang, B. Z. Li, M. Khabsa, H. Fang, H. Ma, 2020<br><br>
+				<a id="ref_6"></a>[6] <a href="https://arxiv.org/abs/1904.10509">
+                    Generating Long Sequences with Sparse Transformer</a>,
+                    R. Child, S. Gray, A. Radford, I. Sutskever, 2019<br><br>
+				<a id="ref_7"></a>[7] <a href="https://arxiv.org/abs/1911.02972">
+                    Blockwise Self-Attention for Long Document Understanding</a>,
+                    J. Qiu, H. Ma, O. Levy, S. Wen-tau Yih, S. Wang, J. Tang, 2019<br><br>
+				<a id="ref_8"></a>[8] <a href="https://arxiv.org/abs/2004.05150">
+                    Longformer: The Long-Document Transformer</a>,
+                    I. Beltagy, M. E. Peters, A. Cohan, 2020<br><br>
+			    <a id="ref_9"></a>[9] <a href="https://ieeexplore.ieee.org/document/5206848">
                     Imagenet: A large-scale hierarchical image database</a>,
                     J. Deng, W. Dong, R. Socher, L.-J. Li, K. Li, L. Fei-Fei, 2009<br><br>
 			</div>
