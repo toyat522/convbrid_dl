@@ -531,12 +531,13 @@
 			and inspecting where the model is "focusing" the most on in the validating images. <br><br>
 
 			<h1>ConvBrid Transformer</h1>
-			A ConvBrid transformer is then created with the exact convolution characteristics of the CNN (similar
-            layers and kernel sizes) and compare its performance on the CIFAR-10 and CIFAR-100 datasets of the three aforementioned models. 
-			The ConvBrid model is expected to perform similarly if not better than the CNN.<br><br>
+            A ConvBrid transformer is then created with the exact convolutional characteristics of the CNN
+            (matching layers and kernel sizes) and its performance is compared with the other three models on the
+            CIFAR-10 and CIFAR-100 datasets. During the training of the ConvBrid model, the transition from ConvAttention
+            (with kernel size = 5) to a full transformer (without masking) is triggered when the ConvAttention module reaches
+            saturation, which is indicated by the training accuracy nearly plateauing. For the CIFAR-10 and
+            CIFAR-100 datasets, this transition occurs at roughly epochs 15 and 80, respectively.
 
-            After this initial step, the aim is to explore different ways of manipulating the ConvBrid kernel sizes, and 
-			analyse how they affect performance, expanding to larger datasets such as ImageNet-1K <a href="#ref_10">[10]</a><br>.
 		</div>
 		<div class="margin-right-block">
 		</div>
@@ -582,31 +583,31 @@
 			<h1>ConvBrid</h1>
 			<img src="./images/convbrid_attn_.png" width=850px/>
 
-            From the attention maps for our ConvBrid model, we found that the switching mechanism from CNN to a transformer was not working as
-            intended. 
+            From the attention maps of our ConvBrid model, we discovered that the switching mechanism from CNN to a
+            transformer was not functioning as intended, and the model was still learning locality features. Even without
+            the attention masking, ConvAttention continued to learn patterns such as edges and corners through the pooling
+            layer, which combines tokens within each kernel via a linear layer. When comparing the attention map with the
+            previous ConvAttention implementation of a CNN, we observed the same behavior.<br><br>
 
-            Discuss the TradAttention model, explaining that is the ConvAttention without attention masking (but with pooling). This model behavae exactly like the ConvAttention.
-			Discuss that the restricting mechanism is satisfy with the pooling alone and the attention masking is not necessary. This is still an interesting result. However, it create a diffuculty in transitioning between ConvAttention and traditional transfomer. <br></br>
-
-			During the training of the ConvBrid model, the transition from ConvAttention (with kernel size = 5) to a transformer (without masking) 
-			is triggered when the ConvAttention module reaches saturation, indicated by the training accuracy nearly plateauing. For CIFAR-10 and 
-			CIFAR-100, this corresponds to epochs 15 and 80 respectively, as represented in the figure above.<br></br>
-
+            In another experiment, we removed the attention mask from the first epoch, but the same attention patterns emerged,
+            albeit with empirically faster training times. This suggests an interesting result: attention masking may be useful
+            for improving training speed but is not strictly necessary, due to the pooling layer. This creates a challenge in
+            transitioning between ConvAttention and a traditional transformer, ultimately leading to ConvBrid achieving the same
+            results as ConvAttention.
 			</div>
 		<div class="margin-right-block">
 		</div>
 	</div>
 
-	<!-- REMOVE IF THERES ENOUGH THINGS TO SAY-->
 	<div class="content-margin-container" id="further_work">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
 			<h2>Further Work</h2>
-			A further attempt was to change the ConvBrid kernel sizes more fluidly during the training process. The changed ConvBrid
-			model takes as input a function from epoch to kernel size, so that by inputting a slowly growing function,
-			the model will learn progressively broader contextual information. It aims to mimic a hierarchical learning process which
-			will be more efficient. <br></br>
+            A further attempt was made to adapt the ConvBrid kernel sizes more fluidly during training. In this modified model,
+            the kernel size is defined as a function of the epoch, allowing it to grow gradually. This setup enables the model
+            to progressively learn broader contextual information, mimicking a hierarchical learning process that is potentially
+            more efficient.<br><br>
 
 			However, as the pooling layer in the ConvAttention needs to have a fixed structure across epochs, it has to be initially set
 			to be compatible with the maximum kernel size in the training process. While in the static case the dimension of the 
@@ -630,9 +631,8 @@
 			is less than the corresponding weights, the tokens outside the kernel will not be updated in the training pass. Thus, a custom
 			backward pass in the linear pooling layer was implemented to enable the layer to do this selective dropout. <br></br>
 			
-			As of now, the model set at kernel = 5 is only able to reach 52% accuracy. This probably points to further debugging that has to be
-			done. Theoretically, it should be able to perform comparably to the initial ConvBrid model, if not better. <br></br>
-			
+			As of now, the model set at kernel = 5 is only able to reach 52% accuracy. This probably points to further debugging
+            that has to be done. Theoretically, it should be able to perform comparably to the initial ConvBrid model, if not better.
 		</div>
 		<div class="margin-right-block">
 		</div>
@@ -643,7 +643,8 @@
 		</div>
 		<div class="main-content-block">
 			<h2>Conclusion</h2>
-			Let's end with some discussion of the implications and limitations.
+            After this initial step, the aim is to explore different ways of manipulating the ConvBrid kernel sizes, and 
+			analyse how they affect performance, expanding to larger datasets such as ImageNet-1K <a href="#ref_10">[10]</a>.
 		</div>
 		<div class="margin-right-block">
 		</div>
