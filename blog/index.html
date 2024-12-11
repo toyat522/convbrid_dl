@@ -609,9 +609,9 @@
             to progressively learn broader contextual information, mimicking a hierarchical learning process that is potentially
             more efficient.<br><br>
 
-			However, as the pooling layer in the ConvAttention needs to have a fixed structure across epochs, it has to be initially set
-			to be compatible with the maximum kernel size in the training process. While in the static case the dimension of the 
-			input is <math xmlns="http://www.w3.org/1998/Math/MathML">
+			However, because the pooling layer in ConvAttention requires a fixed structure across epochs, it must be configured
+            to accommodate the maximum kernel size anticipated during training. While in the static case, the input dimension
+            of the pooling layer is <math xmlns="http://www.w3.org/1998/Math/MathML">
 				<mi>kernel</mi>
 				<msup>
 					<mi></mi>
@@ -619,7 +619,7 @@
 				</msup>
 				<mo>&#xD7;</mo>
 				<mi>num_channels</mi>
-			</math>, now it has to be set to <math xmlns="http://www.w3.org/1998/Math/MathML">
+			</math>, in this dynamic approach it must be set to <math xmlns="http://www.w3.org/1998/Math/MathML">
 				<mi>max_kernel</mi>
 				<msup>
 					<mi></mi>
@@ -627,13 +627,15 @@
 				</msup>
 				<mo>&#xD7;</mo>
 				<mi>num_channels</mi>
-			</math>, if the current kernel size
-			is less than the corresponding weights, the tokens outside the kernel will not be updated in the training pass. Thus, a custom
-			backward pass in the linear pooling layer was implemented to enable the layer to do this selective dropout. <br></br>
-			
-			As of now, the model set at kernel = 5 is only able to reach 52% accuracy. This probably points to further debugging
-            that has to be done. Theoretically, it should be able to perform comparably to the initial ConvBrid model, if not better.
-		</div>
+			</math>. 
+            If the current kernel size is smaller than the maximum, tokens outside the kernel remain unutilized during the
+            training pass. To address this, a custom backward pass was implemented in the linear pooling layer to enable
+            selective dropout of these tokens during updates. <br><br>
+
+			As of now, the model set with a kernel size of 5 achieved only 52% accuracy, which suggests further debugging is
+            necessary. Theoretically, this dynamic kernel approach should perform comparably to or better than the initial
+            ConvBrid model, given its ability to progressively expand its receptive field during training.		
+        </div>
 		<div class="margin-right-block">
 		</div>
 	</div>
